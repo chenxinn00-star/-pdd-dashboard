@@ -1,0 +1,119 @@
+{
+  "updatedAt": "2026-05-13 17:00:44",
+  "stores": {
+    "official": {
+      "storeId": "official",
+      "storeName": "官方店",
+      "goods": {
+        "932697304345": {
+          "goodsId": "932697304345",
+          "name": "官旗小香管主链",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 18388.24,
+              "visitors": 16225,
+              "conversionRate": 6.0
+            }
+          ]
+        },
+        "933599709509": {
+          "goodsId": "933599709509",
+          "name": "官旗小香管+专效次链",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 4596.7,
+              "visitors": 2490,
+              "conversionRate": 9.0
+            }
+          ]
+        },
+        "911804836948": {
+          "goodsId": "911804836948",
+          "name": "官旗红花+光泽",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 7370.95,
+              "visitors": 2493,
+              "conversionRate": 16.0
+            }
+          ]
+        },
+        "39194042": {
+          "goodsId": "39194042",
+          "name": "官旗专效主链",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 4163.73,
+              "visitors": 1530,
+              "conversionRate": 16.0
+            }
+          ]
+        }
+      }
+    },
+    "kouqiang": {
+      "storeId": "kouqiang",
+      "storeName": "口腔店",
+      "goods": {
+        "942700333004": {
+          "goodsId": "942700333004",
+          "name": "小香管+酵素8件套",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 872.3,
+              "visitors": 245,
+              "conversionRate": 5.31
+            }
+          ]
+        },
+        "943153713868": {
+          "goodsId": "943153713868",
+          "name": "小香管+专效",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 3977.88,
+              "visitors": 1300,
+              "conversionRate": 12.77
+            }
+          ]
+        }
+      }
+    },
+    "gehu": {
+      "storeId": "gehu",
+      "storeName": "个护店",
+      "goods": {
+        "917048822440": {
+          "goodsId": "917048822440",
+          "name": "无水酵素主链",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 3262.3,
+              "visitors": 636,
+              "conversionRate": 9.0
+            }
+          ]
+        },
+        "907458671037": {
+          "goodsId": "907458671037",
+          "name": "无水酵素+光泽",
+          "records": [
+            {
+              "date": "2026-05-12",
+              "amount": 1624.0,
+              "visitors": 448,
+              "conversionRate": 6.0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

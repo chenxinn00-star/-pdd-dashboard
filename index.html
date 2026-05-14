@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>拼多多数据看板</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #8a94a6;
+      --line: #e5e7eb;
+      --soft: #f5f6f8;
+      --panel: #ffffff;
+      --green: #4f9f7a;
+      --blue: #4f8edb;
+      --orange: #d97732;
+      --red: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: #f3f4f6; }
+    header { height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+    .brand strong { color: #c0392b; font-size: 18px; }
+    .brand span { color: var(--muted); border-left: 1px solid var(--line); padding-left: 12px; }
+    .updated { color: var(--muted); font-size: 13px; }
+    .store-tabs, .goods-tabs { display: flex; align-items: center; gap: 10px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--line); overflow-x: auto; }
+    .store-tabs { height: 52px; }
+    .goods-tabs { height: 56px; }
+    button { font: inherit; cursor: pointer; }
+    .tab { height: 100%; border: 0; background: transparent; color: #656d7b; padding: 0 14px; border-bottom: 3px solid transparent; font-weight: 650; white-space: nowrap; }
+    .tab.active { color: var(--green); border-bottom-color: var(--green); }
+    main { max-width: 1280px; margin: 0 auto; padding: 24px 28px 40px; }
+    .filters { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 22px; flex-wrap: wrap; }
+    .filters label { color: #6b7280; font-weight: 650; }
+    input[type="date"] { height: 36px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; background: #fff; color: var(--ink); }
+    .btn { height: 36px; border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 0 14px; color: var(--ink); }
+    .btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
+    .metric-card, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
+    .metric-card { padding: 18px 20px; min-height: 110px; }
+    .metric-card .label { color: var(--muted); font-size: 14px; font-weight: 650; }
+    .metric-card .value { margin-top: 10px; font-size: 30px; line-height: 1; font-weight: 750; }
+    .metric-card .unit { margin-top: 8px; color: #a0a7b3; font-size: 13px; }
+    .metric-card.green .value { color: var(--green); }
+    .metric-card.blue .value { color: var(--blue); }
+    .metric-card.orange .value { color: var(--orange); }
+    .panel { padding: 20px; margin-bottom: 18px; }
+    .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .panel-title h2 { margin: 0; font-size: 16px; }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; color: #6b7280; font-size: 13px; }
+    .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--color); }
+    svg { width: 100%; height: 300px; display: block; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+    th { color: #6b7280; background: #f8fafc; font-weight: 650; }
+    th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .empty { color: var(--muted); padding: 22px; text-align: center; }
+    @media (max-width: 860px) {
+      header { display: block; height: auto; padding: 14px 18px; }
+      .updated { margin-top: 6px; }
+      main { padding: 18px; }
+      .store-tabs, .goods-tabs { padding: 0 18px; }
+      .cards { grid-template-columns: 1fr; }
+      svg { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><strong>拼多多数据看板</strong><span>多店铺商品监控</span></div>
+    <div class="updated" id="updatedAt">读取中...</div>
+  </header>
+  <nav class="store-tabs" id="storeTabs"></nav>
+  <nav class="goods-tabs" id="goodsTabs"></nav>
+  <main>
+    <section class="filters">
+      <label>日期</label>
+      <input type="date" id="startDate">
+      <span>至</span>
+      <input type="date" id="endDate">
+      <button class="btn primary" id="applyDate">查看</button>
+      <button class="btn" data-range="7">近7天</button>
+      <button class="btn" data-range="30">近30天</button>
+    </section>
+
+    <section class="cards">
+      <article class="metric-card green">
+        <div class="label">成交金额合计</div>
+        <div class="value" id="amountTotal">¥0.00</div>
+        <div class="unit">元</div>
+      </article>
+      <article class="metric-card blue">
+        <div class="label">访客数合计</div>
+        <div class="value" id="visitorTotal">0</div>
+        <div class="unit">人次</div>
+      </article>
+      <article class="metric-card orange">
+        <div class="label">平均转化率</div>
+        <div class="value" id="cvrAvg">0.00%</div>
+        <div class="unit">成交转化率</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h2>每日成交金额（元）</h2>
+        <div class="legend"><span style="--color: var(--green)">成交金额</span></div>
+      </div>
+      <svg id="amountChart"></svg>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h2>每日访客数 & 转化率</h2>
+        <div class="legend">
+          <span style="--color: var(--blue)">访客数</span>
+          <span style="--color: var(--orange)">转化率（右轴）</span>
+        </div>
+      </div>
+      <svg id="visitorChart"></svg>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title"><h2>每日明细</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>日期</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>成交转化率</th></tr>
+          </thead>
+          <tbody id="detailRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const money = (value) => Number(value || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const int = (value) => Number(value || 0).toLocaleString("zh-CN");
+    const pct = (value) => `${Number(value || 0).toFixed(2)}%`;
+    const ymd = (date) => date.toISOString().slice(0, 10);
+    const state = { data: null, storeId: "", goodsId: "summary", start: "", end: "" };
+
+    function stores() {
+      return Object.values(state.data?.stores || {});
+    }
+
+    function currentStore() {
+      return state.data.stores[state.storeId] || stores()[0];
+    }
+
+    function goodsList() {
+      return Object.values(currentStore()?.goods || {}).sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+    }
+
+    function allDates() {
+      return [...new Set(stores().flatMap((store) => Object.values(store.goods || {}).flatMap((goods) => (goods.records || []).map((row) => row.date))))].sort();
+    }
+
+    function selectedGoods() {
+      if (state.goodsId === "summary") return goodsList();
+      return goodsList().filter((goods) => goods.goodsId === state.goodsId);
+    }
+
+    function filteredRows() {
+      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name })))
+        .filter((row) => (!state.start || row.date >= state.start) && (!state.end || row.date <= state.end))
+        .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name, "zh-CN"));
+    }
+
+    function groupedByDate(rows) {
+      const map = new Map();
+      rows.forEach((row) => {
+        const item = map.get(row.date) || { date: row.date, amount: 0, visitors: 0, cvrWeighted: 0 };
+        item.amount += Number(row.amount || 0);
+        const visitors = Number(row.visitors || 0);
+        item.visitors += visitors;
+        item.cvrWeighted += Number(row.conversionRate || 0) * visitors;
+        map.set(row.date, item);
+      });
+      return [...map.values()]
+        .map((row) => ({ ...row, conversionRate: row.visitors ? row.cvrWeighted / row.visitors : 0 }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    function setDefaultDates() {
+      const dates = allDates();
+      state.start = dates[0] || "";
+      state.end = dates.at(-1) || "";
+      document.getElementById("startDate").value = state.start;
+      document.getElementById("endDate").value = state.end;
+    }
+
+    function renderStoreTabs() {
+      const root = document.getElementById("storeTabs");
+      root.innerHTML = "";
+      stores().forEach((store) => {
+        const button = document.createElement("button");
+        button.className = store.storeId === state.storeId ? "tab active" : "tab";
+        button.textContent = store.storeName;
+        button.onclick = () => {
+          state.storeId = store.storeId;
+          state.goodsId = "summary";
+          render();
+        };
+        root.appendChild(button);
+      });
+    }
+
+    function renderGoodsTabs() {
+      const root = document.getElementById("goodsTabs");
+      root.innerHTML = "";
+      const items = [{ goodsId: "summary", name: "汇总" }, ...goodsList()];
+      items.forEach((goods) => {
+        const button = document.createElement("button");
+        button.className = goods.goodsId === state.goodsId ? "tab active" : "tab";
+        button.textContent = goods.goodsId === "summary" ? "汇总" : goods.name;
+        button.onclick = () => {
+          state.goodsId = goods.goodsId;
+          render();
+        };
+        root.appendChild(button);
+      });
+    }
+
+    function renderMetrics(rows) {
+      const amount = rows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      const visitors = rows.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
+      const cvr = visitors
+        ? rows.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors
+        : 0;
+      document.getElementById("amountTotal").textContent = `¥${money(amount)}`;
+      document.getElementById("visitorTotal").textContent = int(visitors);
+      document.getElementById("cvrAvg").textContent = pct(cvr);
+    }
+
+    function niceScale(maxValue, tickCount = 4) {
+      const max = Math.max(Number(maxValue || 0), 1);
+      const rawStep = max / tickCount;
+      const power = 10 ** Math.floor(Math.log10(rawStep));
+      const base = rawStep / power;
+      const stepBase = base <= 1 ? 1 : base <= 2 ? 2 : base <= 5 ? 5 : 10;
+      const step = stepBase * power;
+      return { min: 0, max: Math.ceil(max / step) * step, step };
+    }
+
+    function drawLineChart(svgId, rows, lines, options = {}) {
+      const svg = document.getElementById(svgId);
+      const width = svg.clientWidth || 900;
+      const height = svg.clientHeight || 300;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+      if (!rows.length) {
+        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
+        return;
+      }
+      const pad = { left: 74, right: options.rightAxis ? 74 : 24, top: 30, bottom: 42 };
+      const chartW = width - pad.left - pad.right;
+      const chartH = height - pad.top - pad.bottom;
+      const dates = rows.map((row) => row.date);
+      const x = (date) => dates.length === 1
+        ? pad.left + chartW / 2
+        : pad.left + (dates.indexOf(date) / (dates.length - 1)) * chartW;
+      const domainFor = (key) => {
+        const values = rows.map((row) => Number(row[key] || 0));
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        if (min === max) {
+          const spread = Math.max(Math.abs(max) * 0.12, key === "conversionRate" ? 1 : 10);
+          return { min: Math.max(0, min - spread), max: max + spread };
+        }
+        const spread = (max - min) * 0.12;
+        return { min: Math.max(0, min - spread), max: max + spread };
+      };
+      const y = (value, domain) => {
+        const span = Math.max(domain.max - domain.min, 1);
+        return pad.top + chartH - ((Number(value || 0) - domain.min) / span) * chartH;
+      };
+      const formatFor = (key, value) => {
+        if (key === "amount") return `¥${money(value)}`;
+        if (key === "conversionRate") return pct(value);
+        return int(value);
+      };
+
+      const leftDomain = domainFor(lines[0].key);
+      const rightDomain = options.rightAxis && lines[1] ? domainFor(lines[1].key) : null;
+      for (let i = 0; i <= 4; i += 1) {
+        const yy = pad.top + i * chartH / 4;
+        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
+        const leftValue = leftDomain.max - ((leftDomain.max - leftDomain.min) * i / 4);
+        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">${formatFor(lines[0].key, leftValue)}</text>`);
+        if (rightDomain && lines[1]) {
+          const rightValue = rightDomain.max - ((rightDomain.max - rightDomain.min) * i / 4);
+          svg.insertAdjacentHTML("beforeend", `<text x="${width - pad.right + 10}" y="${yy + 4}" text-anchor="start" fill="#6b7280" font-size="12">${formatFor(lines[1].key, rightValue)}</text>`);
+        }
+      }
+      dates.forEach((date, index) => {
+        if (index % Math.ceil(dates.length / 7) === 0 || index === dates.length - 1) {
+          svg.insertAdjacentHTML("beforeend", `<text x="${x(date)}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${date.slice(5)}</text>`);
+        }
+      });
+
+      lines.forEach((line) => {
+        const domain = line.key === lines[0].key ? leftDomain : (rightDomain || leftDomain);
+        const points = rows.map((row) => `${x(row.date)},${y(row[line.key], domain)}`).join(" ");
+        svg.insertAdjacentHTML("beforeend", `<polyline points="${points}" fill="none" stroke="${line.color}" stroke-width="2.5"/>`);
+        rows.forEach((row) => {
+          const cx = x(row.date);
+          const cy = y(row[line.key], domain);
+          svg.insertAdjacentHTML("beforeend", `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#fff" stroke="${line.color}" stroke-width="2"/>`);
+          if (rows.length <= 3) {
+            svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, cy - 10)}" text-anchor="middle" fill="${line.color}" font-size="12" font-weight="600">${formatFor(line.key, row[line.key])}</text>`);
+          }
+        });
+      });
+    }
+
+    function drawAmountChart(svgId, rows) {
+      const svg = document.getElementById(svgId);
+      const width = svg.clientWidth || 900;
+      const height = svg.clientHeight || 300;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+      if (!rows.length) {
+        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
+        return;
+      }
+
+      const pad = { left: 86, right: 24, top: 30, bottom: 42 };
+      const chartW = width - pad.left - pad.right;
+      const chartH = height - pad.top - pad.bottom;
+      const scale = niceScale(Math.max(...rows.map((row) => Number(row.amount || 0))));
+      const step = chartW / Math.max(rows.length, 1);
+      const x = (index) => pad.left + step * index + step / 2;
+      const y = (value) => pad.top + chartH - (Number(value || 0) / scale.max) * chartH;
+
+      for (let value = scale.max; value >= 0; value -= scale.step) {
+        const yy = y(value);
+        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
+        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">¥${int(value)}</text>`);
+      }
+
+      rows.forEach((row, index) => {
+        const cx = x(index);
+        const barW = Math.min(64, Math.max(22, step * 0.42));
+        const yy = y(row.amount);
+        const barH = Math.max(5, pad.top + chartH - yy);
+        svg.insertAdjacentHTML("beforeend", `<rect x="${cx - barW / 2}" y="${yy}" width="${barW}" height="${barH}" rx="6" fill="#4f9f7a" opacity="0.78"/>`);
+        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, yy - 8)}" text-anchor="middle" fill="#3e8565" font-size="12" font-weight="650">¥${money(row.amount)}</text>`);
+        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${row.date.slice(5)}</text>`);
+      });
+    }
+
+    function drawVisitorCvrChart(svgId, rows) {
+      const svg = document.getElementById(svgId);
+      const width = svg.clientWidth || 900;
+      const height = svg.clientHeight || 300;
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+      if (!rows.length) {
+        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
+        return;
+      }
+
+      const pad = { left: 74, right: 74, top: 30, bottom: 42 };
+      const chartW = width - pad.left - pad.right;
+      const chartH = height - pad.top - pad.bottom;
+      const dates = rows.map((row) => row.date);
+      const step = chartW / Math.max(dates.length, 1);
+      const x = (index) => pad.left + step * index + step / 2;
+      const visitorScale = niceScale(Math.max(...rows.map((row) => Number(row.visitors || 0))));
+      const cvrValues = rows.map((row) => Number(row.conversionRate || 0));
+      const cvrMinRaw = Math.min(...cvrValues);
+      const cvrMaxRaw = Math.max(...cvrValues);
+      const cvrSpread = cvrMinRaw === cvrMaxRaw ? Math.max(cvrMaxRaw * 0.12, 1) : (cvrMaxRaw - cvrMinRaw) * 0.12;
+      const cvrDomain = { min: Math.max(0, cvrMinRaw - cvrSpread), max: cvrMaxRaw + cvrSpread };
+      const yVisitor = (value) => pad.top + chartH - (Number(value || 0) / visitorScale.max) * chartH;
+      const yCvr = (value) => {
+        const span = Math.max(cvrDomain.max - cvrDomain.min, 1);
+        return pad.top + chartH - ((Number(value || 0) - cvrDomain.min) / span) * chartH;
+      };
+
+      for (let value = visitorScale.max; value >= 0; value -= visitorScale.step) {
+        const yy = yVisitor(value);
+        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
+        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">${int(value)}</text>`);
+      }
+      for (let i = 0; i <= 4; i += 1) {
+        const yy = pad.top + i * chartH / 4;
+        const cvrValue = cvrDomain.max - ((cvrDomain.max - cvrDomain.min) * i / 4);
+        svg.insertAdjacentHTML("beforeend", `<text x="${width - pad.right + 10}" y="${yy + 4}" text-anchor="start" fill="#6b7280" font-size="12">${pct(cvrValue)}</text>`);
+      }
+
+      rows.forEach((row, index) => {
+        const cx = x(index);
+        const barW = Math.min(56, Math.max(18, step * 0.46));
+        const y = yVisitor(row.visitors);
+        const barH = Math.max(4, pad.top + chartH - y);
+        svg.insertAdjacentHTML("beforeend", `<rect x="${cx - barW / 2}" y="${y}" width="${barW}" height="${barH}" rx="5" fill="#4f8edb" opacity="0.72"/>`);
+        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${row.date.slice(5)}</text>`);
+        if (rows.length <= 3) {
+          svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, y - 8)}" text-anchor="middle" fill="#2f6fb5" font-size="12" font-weight="650">${int(row.visitors)}</text>`);
+        }
+      });
+
+      const linePoints = rows.map((row, index) => `${x(index)},${yCvr(row.conversionRate)}`);
+      if (rows.length === 1) {
+        const [cx, cy] = linePoints[0].split(",").map(Number);
+        svg.insertAdjacentHTML("beforeend", `<line x1="${cx - 34}" y1="${cy}" x2="${cx + 34}" y2="${cy}" stroke="#d97732" stroke-width="3" stroke-linecap="round"/>`);
+      } else {
+        svg.insertAdjacentHTML("beforeend", `<polyline points="${linePoints.join(" ")}" fill="none" stroke="#d97732" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`);
+      }
+      rows.forEach((row, index) => {
+        const cx = x(index);
+        const cy = yCvr(row.conversionRate);
+        svg.insertAdjacentHTML("beforeend", `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#fff" stroke="#d97732" stroke-width="2"/>`);
+        if (rows.length <= 3) {
+          svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, cy - 10)}" text-anchor="middle" fill="#d97732" font-size="12" font-weight="650">${pct(row.conversionRate)}</text>`);
+        }
+      });
+    }
+
+    function renderRows(rows) {
+      const root = document.getElementById("detailRows");
+      if (!rows.length) {
+        root.innerHTML = `<tr><td colspan="6"><div class="empty">当前范围暂无数据</div></td></tr>`;
+        return;
+      }
+      root.innerHTML = [...rows].sort((a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name, "zh-CN")).map((row) => `
+        <tr>
+          <td>${row.date}</td>
+          <td>${row.name}</td>
+          <td>${row.goodsId}</td>
+          <td>¥${money(row.amount)}</td>
+          <td>${int(row.visitors)}</td>
+          <td>${pct(row.conversionRate)}</td>
+        </tr>`).join("");
+    }
+
+    function applyRange(days) {
+      const end = state.end ? new Date(`${state.end}T00:00:00`) : new Date();
+      const start = new Date(end);
+      start.setDate(start.getDate() - days + 1);
+      state.start = ymd(start);
+      state.end = ymd(end);
+      document.getElementById("startDate").value = state.start;
+      document.getElementById("endDate").value = state.end;
+      render();
+    }
+
+    function render() {
+      renderStoreTabs();
+      renderGoodsTabs();
+      const rows = filteredRows();
+      const dateRows = groupedByDate(rows);
+      renderMetrics(rows);
+      drawAmountChart("amountChart", dateRows);
+      drawVisitorCvrChart("visitorChart", dateRows);
+      renderRows(rows);
+    }
+
+    document.getElementById("applyDate").onclick = () => {
+      state.start = document.getElementById("startDate").value;
+      state.end = document.getElementById("endDate").value;
+      render();
+    };
+    document.querySelectorAll("[data-range]").forEach((button) => {
+      button.onclick = () => applyRange(Number(button.dataset.range));
+    });
+
+    fetch("pdd_data.json?ts=" + Date.now())
+      .then((response) => response.json())
+      .then((data) => {
+        state.data = data;
+        state.storeId = stores()[0]?.storeId || "";
+        document.getElementById("updatedAt").textContent = `更新：${data.updatedAt || "暂无"}`;
+        setDefaultDates();
+        render();
+      })
+      .catch((error) => {
+        document.getElementById("updatedAt").textContent = "读取 pdd_data.json 失败";
+        document.querySelector("main").innerHTML = `<section class="panel"><div class="empty">${error.message}</div></section>`;
+      });
+  </script>
+</body>
+</html>
