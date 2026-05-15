@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15 10:30:26",
+  "updatedAt": "2026-05-15 11:25:00",
   "stores": {
     "official": {
       "storeId": "official",
@@ -10,10 +10,82 @@
           "name": "官旗小香管主链",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 11903.01,
+              "visitors": 7074,
+              "conversionRate": 8.03
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 9143.82,
+              "visitors": 5187,
+              "conversionRate": 8.66
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 8518.81,
+              "visitors": 5050,
+              "conversionRate": 7.98
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 10826.8,
+              "visitors": 10097,
+              "conversionRate": 5.13
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 15814.79,
+              "visitors": 16145,
+              "conversionRate": 4.6
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 17197.54,
+              "visitors": 17956,
+              "conversionRate": 4.52
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 16452.52,
+              "visitors": 16543,
+              "conversionRate": 4.7
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 10245.59,
+              "visitors": 8413,
+              "conversionRate": 5.88
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 9164.83,
+              "visitors": 8833,
+              "conversionRate": 5.29
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 12994.83,
+              "visitors": 11217,
+              "conversionRate": 5.82
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 16491.2,
+              "visitors": 13718,
+              "conversionRate": 5.98
+            },
+            {
               "date": "2026-05-12",
               "amount": 18388.24,
               "visitors": 16225,
-              "conversionRate": 6.0
+              "conversionRate": 5.52
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 16301.1,
+              "visitors": 13673,
+              "conversionRate": 5.76
             },
             {
               "date": "2026-05-14",
@@ -25,13 +97,85 @@
         },
         "933599709509": {
           "goodsId": "933599709509",
-          "name": "官旗小香管+专效次链",
+          "name": "官旗小香管+光泽次链",
           "records": [
+            {
+              "date": "2026-05-01",
+              "amount": 0.0,
+              "visitors": 5,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 0.0,
+              "visitors": 11,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 0.0,
+              "visitors": 4,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 0.0,
+              "visitors": 6,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 0.0,
+              "visitors": 6,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 67.9,
+              "visitors": 10,
+              "conversionRate": 10.0
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 0.0,
+              "visitors": 15,
+              "conversionRate": 0.0
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 732.07,
+              "visitors": 18,
+              "conversionRate": 5.56
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 226.2,
+              "visitors": 131,
+              "conversionRate": 6.11
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 786.06,
+              "visitors": 464,
+              "conversionRate": 5.6
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 1177.2,
+              "visitors": 787,
+              "conversionRate": 5.84
+            },
             {
               "date": "2026-05-12",
               "amount": 4596.7,
               "visitors": 2490,
-              "conversionRate": 9.0
+              "conversionRate": 8.07
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 10024.31,
+              "visitors": 4225,
+              "conversionRate": 10.11
             },
             {
               "date": "2026-05-14",
@@ -46,10 +190,82 @@
           "name": "官旗红花+光泽",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 6114.63,
+              "visitors": 2032,
+              "conversionRate": 16.24
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 6316.96,
+              "visitors": 2065,
+              "conversionRate": 16.03
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 5558.14,
+              "visitors": 2098,
+              "conversionRate": 14.59
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 7645.03,
+              "visitors": 2293,
+              "conversionRate": 17.71
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 8473.63,
+              "visitors": 2814,
+              "conversionRate": 17.45
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 10062.95,
+              "visitors": 3144,
+              "conversionRate": 17.68
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 8962.83,
+              "visitors": 3151,
+              "conversionRate": 15.93
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 8754.82,
+              "visitors": 2922,
+              "conversionRate": 16.44
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 7378.7,
+              "visitors": 2535,
+              "conversionRate": 16.21
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 8807.36,
+              "visitors": 2289,
+              "conversionRate": 16.61
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 8759.31,
+              "visitors": 3242,
+              "conversionRate": 15.02
+            },
+            {
               "date": "2026-05-12",
               "amount": 7370.95,
               "visitors": 2493,
-              "conversionRate": 16.0
+              "conversionRate": 15.76
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 8516.81,
+              "visitors": 2986,
+              "conversionRate": 16.04
             },
             {
               "date": "2026-05-14",
@@ -64,10 +280,82 @@
           "name": "官旗专效主链",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 2914.03,
+              "visitors": 1023,
+              "conversionRate": 18.57
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 3446.34,
+              "visitors": 1105,
+              "conversionRate": 20.36
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 3684.47,
+              "visitors": 1201,
+              "conversionRate": 18.73
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 2835.75,
+              "visitors": 1144,
+              "conversionRate": 16.43
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 4159.63,
+              "visitors": 1366,
+              "conversionRate": 19.33
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 4597.03,
+              "visitors": 1464,
+              "conversionRate": 20.49
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 3908.12,
+              "visitors": 1330,
+              "conversionRate": 18.57
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 3334.18,
+              "visitors": 1221,
+              "conversionRate": 16.71
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 2208.93,
+              "visitors": 925,
+              "conversionRate": 13.95
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 2553.59,
+              "visitors": 1004,
+              "conversionRate": 15.84
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 3480.07,
+              "visitors": 1343,
+              "conversionRate": 16.08
+            },
+            {
               "date": "2026-05-12",
               "amount": 4163.73,
               "visitors": 1530,
-              "conversionRate": 16.0
+              "conversionRate": 15.82
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 3833.2,
+              "visitors": 1619,
+              "conversionRate": 14.21
             },
             {
               "date": "2026-05-14",
@@ -88,10 +376,82 @@
           "name": "小香管+酵素8件套",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 2097.0,
+              "visitors": 363,
+              "conversionRate": 8.26
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 2376.6,
+              "visitors": 374,
+              "conversionRate": 9.09
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 2193.34,
+              "visitors": 450,
+              "conversionRate": 6.89
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 1957.2,
+              "visitors": 298,
+              "conversionRate": 9.4
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 2100.7,
+              "visitors": 331,
+              "conversionRate": 9.06
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 3570.09,
+              "visitors": 571,
+              "conversionRate": 9.81
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 1744.6,
+              "visitors": 373,
+              "conversionRate": 6.97
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 2080.1,
+              "visitors": 369,
+              "conversionRate": 8.4
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 1274.9,
+              "visitors": 268,
+              "conversionRate": 6.72
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 1476.04,
+              "visitors": 255,
+              "conversionRate": 8.63
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 1596.98,
+              "visitors": 279,
+              "conversionRate": 7.89
+            },
+            {
               "date": "2026-05-12",
               "amount": 872.3,
               "visitors": 245,
               "conversionRate": 5.31
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 603.9,
+              "visitors": 147,
+              "conversionRate": 6.12
             },
             {
               "date": "2026-05-14",
@@ -106,10 +466,82 @@
           "name": "小香管+专效",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 2908.2,
+              "visitors": 701,
+              "conversionRate": 15.26
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 1869.8,
+              "visitors": 626,
+              "conversionRate": 11.5
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 1829.11,
+              "visitors": 609,
+              "conversionRate": 11.49
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 1995.3,
+              "visitors": 632,
+              "conversionRate": 12.18
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 1638.41,
+              "visitors": 506,
+              "conversionRate": 12.25
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 3346.8,
+              "visitors": 943,
+              "conversionRate": 13.68
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 9721.2,
+              "visitors": 2283,
+              "conversionRate": 16.34
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 25005.07,
+              "visitors": 6147,
+              "conversionRate": 15.7
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 10780.58,
+              "visitors": 2942,
+              "conversionRate": 14.07
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 8935.52,
+              "visitors": 2791,
+              "conversionRate": 12.4
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 6279.6,
+              "visitors": 1738,
+              "conversionRate": 13.81
+            },
+            {
               "date": "2026-05-12",
-              "amount": 3977.88,
+              "amount": 3977.8,
               "visitors": 1300,
-              "conversionRate": 12.77
+              "conversionRate": 12.38
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 4938.63,
+              "visitors": 1415,
+              "conversionRate": 13.99
             },
             {
               "date": "2026-05-14",
@@ -130,10 +562,82 @@
           "name": "无水酵素主链",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 2348.2,
+              "visitors": 620,
+              "conversionRate": 5.81
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 3183.3,
+              "visitors": 620,
+              "conversionRate": 8.55
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 2715.6,
+              "visitors": 693,
+              "conversionRate": 6.49
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 2567.4,
+              "visitors": 699,
+              "conversionRate": 6.58
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 3162.4,
+              "visitors": 740,
+              "conversionRate": 6.49
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 1936.0,
+              "visitors": 381,
+              "conversionRate": 4.72
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 3042.7,
+              "visitors": 619,
+              "conversionRate": 7.75
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 1975.7,
+              "visitors": 466,
+              "conversionRate": 7.08
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 3292.2,
+              "visitors": 573,
+              "conversionRate": 9.42
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 3061.7,
+              "visitors": 638,
+              "conversionRate": 8.31
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 2651.2,
+              "visitors": 599,
+              "conversionRate": 7.18
+            },
+            {
               "date": "2026-05-12",
               "amount": 3262.3,
               "visitors": 636,
-              "conversionRate": 9.0
+              "conversionRate": 8.18
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 3180.0,
+              "visitors": 683,
+              "conversionRate": 9.22
             },
             {
               "date": "2026-05-14",
@@ -148,10 +652,82 @@
           "name": "无水酵素+光泽",
           "records": [
             {
+              "date": "2026-05-01",
+              "amount": 588.0,
+              "visitors": 252,
+              "conversionRate": 3.97
+            },
+            {
+              "date": "2026-05-02",
+              "amount": 529.2,
+              "visitors": 210,
+              "conversionRate": 4.29
+            },
+            {
+              "date": "2026-05-03",
+              "amount": 994.0,
+              "visitors": 274,
+              "conversionRate": 5.84
+            },
+            {
+              "date": "2026-05-04",
+              "amount": 1566.0,
+              "visitors": 327,
+              "conversionRate": 8.26
+            },
+            {
+              "date": "2026-05-05",
+              "amount": 1972.8,
+              "visitors": 397,
+              "conversionRate": 8.56
+            },
+            {
+              "date": "2026-05-06",
+              "amount": 1624.0,
+              "visitors": 470,
+              "conversionRate": 5.96
+            },
+            {
+              "date": "2026-05-07",
+              "amount": 1393.6,
+              "visitors": 356,
+              "conversionRate": 6.74
+            },
+            {
+              "date": "2026-05-08",
+              "amount": 1531.9,
+              "visitors": 463,
+              "conversionRate": 5.4
+            },
+            {
+              "date": "2026-05-09",
+              "amount": 1528.8,
+              "visitors": 438,
+              "conversionRate": 5.94
+            },
+            {
+              "date": "2026-05-10",
+              "amount": 1811.6,
+              "visitors": 458,
+              "conversionRate": 6.77
+            },
+            {
+              "date": "2026-05-11",
+              "amount": 1392.0,
+              "visitors": 503,
+              "conversionRate": 4.77
+            },
+            {
               "date": "2026-05-12",
               "amount": 1624.0,
               "visitors": 448,
-              "conversionRate": 6.0
+              "conversionRate": 6.25
+            },
+            {
+              "date": "2026-05-13",
+              "amount": 1682.0,
+              "visitors": 304,
+              "conversionRate": 9.21
             },
             {
               "date": "2026-05-14",
