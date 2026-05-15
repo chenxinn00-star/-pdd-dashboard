@@ -173,6 +173,7 @@
     const int = (v) => Number(v || 0).toLocaleString("zh-CN");
     const pct = (v) => `${Number(v || 0).toFixed(2)}%`;
     const wan = (v) => `${(Number(v || 0) / 10000).toFixed(1)}万`;
+    const moneyWan = (v) => `¥${wan(v)}`;
     const state = { data: null, view: "day", selectedDate: "" };
 
     function allItems() {
@@ -381,8 +382,8 @@
       document.getElementById("totalAmountLabel").textContent = "单日总成交";
       document.getElementById("totalVisitorsLabel").textContent = "单日总访客";
       document.getElementById("totalCvrLabel").textContent = "单日加权转化率";
-      document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
-      document.getElementById("totalVisitors").textContent = int(total.visitors);
+      document.getElementById("totalAmount").textContent = moneyWan(total.amount);
+      document.getElementById("totalVisitors").textContent = wan(total.visitors);
       document.getElementById("totalCvr").textContent = pct(total.cvr);
       document.getElementById("totalCount").textContent = `${int(new Set(items.map((i) => i.series)).size)} / ${int(items.length)}`;
 
@@ -406,8 +407,8 @@
         return `<details open>
           <summary>
             <div class="series-name">${series}</div>
-            <div class="summary-metric"><span class="label">单日成交</span><span class="value">¥${money(current.amount)}</span></div>
-            <div class="summary-metric"><span class="label">单日访客</span><span class="value">${int(current.visitors)}</span></div>
+            <div class="summary-metric"><span class="label">单日成交</span><span class="value">${moneyWan(current.amount)}</span></div>
+            <div class="summary-metric"><span class="label">单日访客</span><span class="value">${wan(current.visitors)}</span></div>
             <div class="summary-metric"><span class="label">加权转化率</span><span class="value">${pct(current.cvr)}</span></div>
             <div class="summary-metric"><span class="label">金额变化</span><span class="value">${badge(amountChg)}</span></div>
             <div class="summary-metric"><span class="label">初判</span><span class="value">${seriesDiag}</span></div>
@@ -419,7 +420,7 @@
                 <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>金额变化</th><th>原因</th></tr></thead>
                 <tbody>${enriched.map((row) => `<tr>
                   <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
-                  <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
+                  <td>${moneyWan(row.amount)}</td><td>${wan(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
                   <td>${badge(row.amountChg)}</td><td class="diagnosis">${diagnosis(row, row.prev)}</td>
                 </tr>`).join("")}</tbody>
               </table>
@@ -440,8 +441,8 @@
       document.getElementById("totalAmountLabel").textContent = `${period.label}总成交`;
       document.getElementById("totalVisitorsLabel").textContent = `${period.label}总访客`;
       document.getElementById("totalCvrLabel").textContent = `${period.label}加权转化率`;
-      document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
-      document.getElementById("totalVisitors").textContent = int(total.visitors);
+      document.getElementById("totalAmount").textContent = moneyWan(total.amount);
+      document.getElementById("totalVisitors").textContent = wan(total.visitors);
       document.getElementById("totalCvr").textContent = pct(total.cvr);
       document.getElementById("totalCount").textContent = `${int(new Set(items.map((i) => i.series)).size)} / ${int(items.length)}`;
 
@@ -462,8 +463,8 @@
         return `<details open>
           <summary>
             <div class="series-name">${series}</div>
-            <div class="summary-metric"><span class="label">${period.label}成交</span><span class="value">¥${money(current.amount)}</span></div>
-            <div class="summary-metric"><span class="label">${period.label}访客</span><span class="value">${int(current.visitors)}</span></div>
+            <div class="summary-metric"><span class="label">${period.label}成交</span><span class="value">${moneyWan(current.amount)}</span></div>
+            <div class="summary-metric"><span class="label">${period.label}访客</span><span class="value">${wan(current.visitors)}</span></div>
             <div class="summary-metric"><span class="label">加权转化率</span><span class="value">${pct(current.cvr)}</span></div>
             <div class="summary-metric"><span class="label">金额变化</span><span class="value">${badge(amountChg)}</span></div>
             <div class="summary-metric"><span class="label">初判</span><span class="value">${seriesDiag}</span></div>
@@ -475,7 +476,7 @@
                 <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>金额变化</th><th>原因</th></tr></thead>
                 <tbody>${enriched.map((row) => `<tr>
                   <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
-                  <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
+                  <td>${moneyWan(row.amount)}</td><td>${wan(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
                   <td>${badge(row.amountChg)}</td><td class="diagnosis">${periodDiagnosis(row, row.prev)}</td>
                 </tr>`).join("")}</tbody>
               </table>
@@ -502,8 +503,8 @@
         const first = dayAggs.find((agg) => agg.count);
         const last = [...dayAggs].reverse().find((agg) => agg.count);
         const trend = first && last && first !== last ? periodDiagnosis(last, first) : "数据较少，继续观察";
-        const cells = dayAggs.map((agg) => `<td>${agg.count ? `¥${money(agg.amount)}<br><span class="hint">${int(agg.visitors)} / ${pct(agg.cvr)}</span>` : "-"}</td>`).join("");
-        return `<tr><td>${series}</td>${cells}<td>¥${money(total.amount)}<br><span class="hint">${int(total.visitors)} / ${pct(total.cvr)}</span></td><td class="diagnosis">${trend}</td></tr>`;
+        const cells = dayAggs.map((agg) => `<td>${agg.count ? `${moneyWan(agg.amount)}<br><span class="hint">${wan(agg.visitors)} / ${pct(agg.cvr)}</span>` : "-"}</td>`).join("");
+        return `<tr><td>${series}</td>${cells}<td>${moneyWan(total.amount)}<br><span class="hint">${wan(total.visitors)} / ${pct(total.cvr)}</span></td><td class="diagnosis">${trend}</td></tr>`;
       }).join("");
     }
 
