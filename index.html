@@ -58,6 +58,9 @@
     .series-name { font-size: 18px; font-weight: 800; }
     .summary-metric .label { display: block; color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 4px; }
     .summary-metric .value { font-weight: 800; }
+    .metric-cell { min-width: 130px; line-height: 1.35; }
+    .metric-cell .main { font-size: 15px; font-weight: 800; color: var(--ink); }
+    .metric-cell .sub { margin-top: 3px; color: var(--muted); font-size: 12px; font-weight: 650; }
     .details-body { padding: 14px 16px 16px; }
     .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; height: 24px; border-radius: 999px; padding: 0 9px; font-size: 12px; font-weight: 800; }
     .badge.up { color: var(--red); background: #fff1f0; }
@@ -172,6 +175,7 @@
     const money = (v) => Number(v || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const int = (v) => Number(v || 0).toLocaleString("zh-CN");
     const pct = (v) => `${Number(v || 0).toFixed(2)}%`;
+    const wan = (v) => `${(Number(v || 0) / 10000).toFixed(1)}万`;
     const state = { data: null, view: "day", selectedDate: "" };
 
     function allItems() {
@@ -398,7 +402,7 @@
     function weekCells(records, month) {
       return weekBuckets(records, month).map((bucket) => {
         const agg = aggregate(bucket.rows);
-        return `<td>${bucket.rows.length ? `¥${money(agg.amount)}<br><span class="hint">${int(agg.visitors)} / ${pct(agg.cvr)}</span>` : "-"}</td>`;
+        return `<td>${bucket.rows.length ? `<div class="metric-cell"><div class="main">成交 ${wan(agg.amount)}</div><div class="sub">访客 ${wan(agg.visitors)}｜转化 ${pct(agg.cvr)}</div></div>` : "-"}</td>`;
       }).join("");
     }
 
@@ -423,7 +427,7 @@
           return { goods, current, change: changePct(current.amount, prev.amount) };
         }).filter((item) => item.current.count).sort((a, b) => Math.abs(b.change || 0) - Math.abs(a.change || 0));
         const keyGoods = byGoods[0] ? `${byGoods[0].change >= 0 ? "拉动" : "拖累"}：${byGoods[0].goods.name}` : "-";
-        return `<tr><td>${series}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td><td class="diagnosis">${keyGoods}</td></tr>`;
+        return `<tr><td>${series}</td>${weekCells(records, month)}<td><div class="metric-cell"><div class="main">成交 ${wan(monthAgg.amount)}</div><div class="sub">访客 ${wan(monthAgg.visitors)}｜转化 ${pct(monthAgg.cvr)}</div></div></td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td><td class="diagnosis">${keyGoods}</td></tr>`;
       }).join("");
 
       document.getElementById("idWeekBlocks").innerHTML = groupBySeries(items).map(([series, goodsItems]) => `<details>
@@ -444,7 +448,7 @@
                 const latest = filled.at(-1);
                 const previous = filled.length >= 2 ? filled.at(-2) : null;
                 const wow = latest && previous ? changePct(latest.amount, previous.amount) : null;
-                return `<tr><td>${goods.storeName}</td><td>${goods.name}</td><td>${goods.goodsId}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td></tr>`;
+                return `<tr><td>${goods.storeName}</td><td>${goods.name}</td><td>${goods.goodsId}</td>${weekCells(records, month)}<td><div class="metric-cell"><div class="main">成交 ${wan(monthAgg.amount)}</div><div class="sub">访客 ${wan(monthAgg.visitors)}｜转化 ${pct(monthAgg.cvr)}</div></div></td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td></tr>`;
               }).join("")}</tbody>
             </table>
           </div>
