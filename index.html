@@ -92,10 +92,7 @@
   <main>
     <section class="controls">
       <label for="viewSelect">查看口径</label>
-      <select id="viewSelect">
-        <option value="day">单日表现</option>
-        <option value="weeks">本月周趋势</option>
-      </select>
+      <select id="viewSelect"></select>
       <label for="dateSelect" id="dateSelectLabel">选择日期</label>
       <select id="dateSelect"></select>
     </section>
@@ -106,9 +103,9 @@
         <div class="hint" id="latestDateText">最近有数据日期</div>
       </div>
       <section class="cards">
-        <article class="card green"><div class="label">单日总成交</div><div class="value" id="totalAmount">¥0.00</div></article>
-        <article class="card blue"><div class="label">单日总访客</div><div class="value" id="totalVisitors">0</div></article>
-        <article class="card orange"><div class="label">单日加权转化率</div><div class="value" id="totalCvr">0.00%</div></article>
+        <article class="card green"><div class="label" id="totalAmountLabel">单日总成交</div><div class="value" id="totalAmount">¥0.00</div></article>
+        <article class="card blue"><div class="label" id="totalVisitorsLabel">单日总访客</div><div class="value" id="totalVisitors">0</div></article>
+        <article class="card orange"><div class="label" id="totalCvrLabel">单日加权转化率</div><div class="value" id="totalCvr">0.00%</div></article>
         <article class="card"><div class="label">监控系列 / 商品</div><div class="value" id="totalCount">0 / 0</div></article>
       </section>
       <section class="panel">
@@ -201,6 +198,28 @@
       return state.selectedDate || latestDate();
     }
 
+    function allMonths() {
+      return [...new Set(allDates().map((date) => date.slice(0, 7)))].sort();
+    }
+
+    function renderViewOptions() {
+      const months = allMonths();
+      const latestMonth = monthOfLatest();
+      const options = [
+        { value: "day", label: "单日表现" },
+        { value: "last7", label: "近7天累计" },
+        ...months.map((month) => ({
+          value: `month:${month}`,
+          label: month === latestMonth ? `${month} 截至最新` : `${month} 整月`
+        })),
+        { value: "weeks", label: "本月周趋势" }
+      ];
+      const select = document.getElementById("viewSelect");
+      select.innerHTML = options.map((option) => `<option value="${option.value}">${option.label}</option>`).join("");
+      if (!options.some((option) => option.value === state.view)) state.view = "day";
+      select.value = state.view;
+    }
+
     function previousRecord(goods, date) {
       return [...(goods.records || [])].filter((row) => row.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
     }
@@ -291,12 +310,77 @@
       document.getElementById("dateSelectLabel").classList.toggle("hidden", state.view !== "day");
     }
 
+    function periodForView() {
+      if (state.view === "last7") {
+        const dates = lastNDatesUntil(latestDate(), 7);
+        return {
+          title: "近7天系列表现",
+          hint: dates.length ? `${dates[0]} 至 ${dates.at(-1)}` : "暂无数据",
+          dates,
+          label: "近7天",
+          previousDates: previousNDatesBefore(dates[0], dates.length)
+        };
+      }
+      if (state.view.startsWith("month:")) {
+        const month = state.view.slice(6);
+        const dates = allDates().filter((date) => date.startsWith(month));
+        const latestMonth = monthOfLatest();
+        return {
+          title: month === latestMonth ? "本月截至最新系列表现" : `${month} 整月系列表现`,
+          hint: dates.length ? `${month}，截至 ${dates.at(-1)}` : `${month} 暂无数据`,
+          dates,
+          label: month === latestMonth ? "本月截至最新" : "整月",
+          previousDates: previousMonthDates(month)
+        };
+      }
+      return null;
+    }
+
+    function previousNDatesBefore(firstDate, n) {
+      if (!firstDate) return [];
+      const dates = allDates().filter((date) => date < firstDate);
+      return dates.slice(Math.max(0, dates.length - n));
+    }
+
+    function previousMonthDates(month) {
+      const [year, mon] = month.split("-").map(Number);
+      const prev = new Date(year, mon - 2, 1);
+      const prevMonth = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, "0")}`;
+      return allDates().filter((date) => date.startsWith(prevMonth));
+    }
+
+    function recordsForDates(goods, dates) {
+      return (goods.records || []).filter((row) => dates.includes(row.date));
+    }
+
+    function aggregateForGoods(goods, dates) {
+      const agg = aggregate(recordsForDates(goods, dates));
+      return {
+        date: dates.length ? `${dates[0]}~${dates.at(-1)}` : "",
+        amount: agg.amount,
+        visitors: agg.visitors,
+        conversionRate: agg.cvr,
+        cvr: agg.cvr,
+        count: agg.count,
+        goods
+      };
+    }
+
     function renderDay() {
+      const period = periodForView();
+      if (period) {
+        renderPeriod(period);
+        return;
+      }
       const date = selectedDate();
       const items = allItems();
       const latestRows = items.map((goods) => rowFor(goods, date)).filter(Boolean);
       const total = aggregate(latestRows);
+      document.querySelector("#dayView h1").textContent = "单日系列表现";
       document.getElementById("latestDateText").textContent = date ? `当前查看日期：${date}` : "暂无数据";
+      document.getElementById("totalAmountLabel").textContent = "单日总成交";
+      document.getElementById("totalVisitorsLabel").textContent = "单日总访客";
+      document.getElementById("totalCvrLabel").textContent = "单日加权转化率";
       document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
       document.getElementById("totalVisitors").textContent = int(total.visitors);
       document.getElementById("totalCvr").textContent = pct(total.cvr);
@@ -345,6 +429,62 @@
       }).join("");
 
       renderLast7(date, items);
+    }
+
+    function renderPeriod(period) {
+      const items = allItems();
+      const totalRows = items.flatMap((goods) => recordsForDates(goods, period.dates));
+      const total = aggregate(totalRows);
+      document.querySelector("#dayView h1").textContent = period.title;
+      document.getElementById("latestDateText").textContent = period.hint;
+      document.getElementById("totalAmountLabel").textContent = `${period.label}总成交`;
+      document.getElementById("totalVisitorsLabel").textContent = `${period.label}总访客`;
+      document.getElementById("totalCvrLabel").textContent = `${period.label}加权转化率`;
+      document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
+      document.getElementById("totalVisitors").textContent = int(total.visitors);
+      document.getElementById("totalCvr").textContent = pct(total.cvr);
+      document.getElementById("totalCount").textContent = `${int(new Set(items.map((i) => i.series)).size)} / ${int(items.length)}`;
+
+      document.getElementById("seriesBlocks").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
+        const rows = goodsItems.map((goods) => aggregateForGoods(goods, period.dates)).filter((row) => row.count);
+        const prevRows = goodsItems.map((goods) => aggregateForGoods(goods, period.previousDates)).filter((row) => row.count);
+        const current = aggregate(rows);
+        const prev = aggregate(prevRows);
+        const amountChg = changePct(current.amount, prev.amount);
+        const enriched = rows.map((row) => {
+          const prevRow = aggregateForGoods(row.goods, period.previousDates);
+          return { ...row, prev: prevRow.count ? prevRow : null, amountChg: changePct(row.amount, prevRow.amount) };
+        }).sort((a, b) => Math.abs(b.amountChg || 0) - Math.abs(a.amountChg || 0));
+        const pull = enriched.find((row) => (row.amountChg || 0) > 8);
+        const drag = enriched.find((row) => (row.amountChg || 0) < -8);
+        const keyText = [pull ? `拉动：${pull.goods.name}` : "", drag ? `拖累：${drag.goods.name}` : ""].filter(Boolean).join("；") || "结构稳定";
+        const seriesDiag = periodDiagnosis(current, prev);
+        return `<details open>
+          <summary>
+            <div class="series-name">${series}</div>
+            <div class="summary-metric"><span class="label">${period.label}成交</span><span class="value">¥${money(current.amount)}</span></div>
+            <div class="summary-metric"><span class="label">${period.label}访客</span><span class="value">${int(current.visitors)}</span></div>
+            <div class="summary-metric"><span class="label">加权转化率</span><span class="value">${pct(current.cvr)}</span></div>
+            <div class="summary-metric"><span class="label">金额变化</span><span class="value">${badge(amountChg)}</span></div>
+            <div class="summary-metric"><span class="label">初判</span><span class="value">${seriesDiag}</span></div>
+          </summary>
+          <div class="details-body">
+            <div class="hint" style="margin-bottom:10px">${keyText}</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>金额变化</th><th>原因</th></tr></thead>
+                <tbody>${enriched.map((row) => `<tr>
+                  <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
+                  <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
+                  <td>${badge(row.amountChg)}</td><td class="diagnosis">${periodDiagnosis(row, row.prev)}</td>
+                </tr>`).join("")}</tbody>
+              </table>
+            </div>
+          </div>
+        </details>`;
+      }).join("");
+
+      renderLast7(latestDate(), items);
     }
 
     function lastNDatesUntil(date, n) {
@@ -457,17 +597,21 @@
     }
 
     function render() {
+      renderViewOptions();
       renderDateOptions();
       renderDay();
       renderWeeks();
-      document.getElementById("dayView").classList.toggle("hidden", state.view !== "day");
+      document.getElementById("dayView").classList.toggle("hidden", state.view === "weeks");
       document.getElementById("weeksView").classList.toggle("hidden", state.view !== "weeks");
     }
 
     function setView(view) {
       state.view = view;
       document.getElementById("viewSelect").value = view;
-      document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.view === view));
+      document.querySelectorAll(".tab").forEach((tab) => {
+        const active = view === "weeks" ? tab.dataset.view === "weeks" : tab.dataset.view === "day";
+        tab.classList.toggle("active", active);
+      });
       render();
     }
 
