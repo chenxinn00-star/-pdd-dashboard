@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-15 10:12:29",
+  "updatedAt": "2026-05-15 10:30:26",
   "stores": {
     "official": {
       "storeId": "official",
@@ -14,6 +14,12 @@
               "amount": 18388.24,
               "visitors": 16225,
               "conversionRate": 6.0
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 17983.58,
+              "visitors": 15580,
+              "conversionRate": 5.72
             }
           ]
         },
@@ -26,6 +32,12 @@
               "amount": 4596.7,
               "visitors": 2490,
               "conversionRate": 9.0
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 11310.03,
+              "visitors": 5483,
+              "conversionRate": 9.14
             }
           ]
         },
@@ -38,6 +50,12 @@
               "amount": 7370.95,
               "visitors": 2493,
               "conversionRate": 16.0
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 6814.16,
+              "visitors": 2371,
+              "conversionRate": 15.44
             }
           ]
         },
@@ -50,6 +68,12 @@
               "amount": 4163.73,
               "visitors": 1530,
               "conversionRate": 16.0
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 3193.64,
+              "visitors": 1563,
+              "conversionRate": 13.63
             }
           ]
         }
@@ -68,6 +92,12 @@
               "amount": 872.3,
               "visitors": 245,
               "conversionRate": 5.31
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 603.9,
+              "visitors": 149,
+              "conversionRate": 6.04
             }
           ]
         },
@@ -80,6 +110,12 @@
               "amount": 3977.88,
               "visitors": 1300,
               "conversionRate": 12.77
+            },
+            {
+              "date": "2026-05-14",
+              "amount": 4343.41,
+              "visitors": 1422,
+              "conversionRate": 12.52
             }
           ]
         }
