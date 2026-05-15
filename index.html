@@ -57,12 +57,31 @@
     th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
     tbody tr:last-child td { border-bottom: 0; }
     .empty { color: var(--muted); padding: 22px; text-align: center; }
+    .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+    .section-title h2 { margin: 0; font-size: 18px; }
+    .section-title .hint { color: var(--muted); font-size: 13px; }
+    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .mini-card { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 13px 14px; }
+    .mini-card .label { color: var(--muted); font-size: 12px; font-weight: 650; }
+    .mini-card .value { margin-top: 6px; font-size: 22px; font-weight: 760; }
+    .mini-card.green .value { color: var(--green); }
+    .mini-card.blue .value { color: var(--blue); }
+    .mini-card.orange .value { color: var(--orange); }
+    .mini-card.dark .value { color: var(--ink); }
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 56px; height: 24px; border-radius: 999px; padding: 0 9px; font-weight: 700; font-size: 12px; }
+    .badge.up { color: #b42318; background: #fff1f0; }
+    .badge.down { color: #027a48; background: #ecfdf3; }
+    .badge.flat { color: #667085; background: #f2f4f7; }
+    .diagnosis { color: #344054; font-weight: 650; }
+    .danger { color: #b42318; }
+    .good { color: #027a48; }
     @media (max-width: 860px) {
       header { display: block; height: auto; padding: 14px 18px; }
       .updated { margin-top: 6px; }
       main { padding: 18px; }
       .store-tabs, .goods-tabs { padding: 0 18px; }
       .cards { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: 1fr 1fr; }
       svg { height: 240px; }
     }
   </style>
@@ -75,6 +94,57 @@
   <nav class="store-tabs" id="storeTabs"></nav>
   <nav class="goods-tabs" id="goodsTabs"></nav>
   <main>
+    <section class="panel">
+      <div class="section-title">
+        <h2>昨日每 ID 明细</h2>
+        <span class="hint" id="yesterdayHint">最近有数据日期</span>
+      </div>
+      <div class="mini-grid">
+        <div class="mini-card green"><div class="label">昨日成交金额</div><div class="value" id="yAmount">¥0.00</div></div>
+        <div class="mini-card blue"><div class="label">昨日访客数</div><div class="value" id="yVisitors">0</div></div>
+        <div class="mini-card orange"><div class="label">昨日加权转化率</div><div class="value" id="yCvr">0.00%</div></div>
+        <div class="mini-card dark"><div class="label">监控商品数</div><div class="value" id="yGoodsCount">0</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>较前次金额</th><th>初判</th></tr>
+          </thead>
+          <tbody id="yesterdayRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>本月截至最新数据累计</h2>
+        <span class="hint" id="monthHint">按最新数据月份统计</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>店铺</th><th>商品</th><th>商品ID</th><th>累计成交金额</th><th>累计访客</th><th>加权转化率</th><th>日均成交</th><th>有数据天数</th></tr>
+          </thead>
+          <tbody id="monthRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <h2>波动诊断</h2>
+        <span class="hint">金额变化拆成访客、转化率、客单价三个方向</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>店铺</th><th>商品</th><th>日期</th><th>金额变化</th><th>访客变化</th><th>转化率变化</th><th>客单价变化</th><th>原因初判</th></tr>
+          </thead>
+          <tbody id="diagnosisRows"></tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="filters">
       <label>日期</label>
       <input type="date" id="startDate">
@@ -146,12 +216,22 @@
       return Object.values(state.data?.stores || {});
     }
 
+    function storeTabs() {
+      return [{ storeId: "all", storeName: "全部店铺", goods: {} }, ...stores()];
+    }
+
     function currentStore() {
+      if (state.storeId === "all") return { storeId: "all", storeName: "全部店铺", goods: Object.fromEntries(allGoods().map((goods) => [goods.goodsId, goods])) };
       return state.data.stores[state.storeId] || stores()[0];
     }
 
+    function allGoods() {
+      return stores().flatMap((store) => Object.values(store.goods || {}).map((goods) => ({ ...goods, storeId: store.storeId, storeName: store.storeName })));
+    }
+
     function goodsList() {
-      return Object.values(currentStore()?.goods || {}).sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+      const goods = state.storeId === "all" ? allGoods() : Object.values(currentStore()?.goods || {}).map((goods) => ({ ...goods, storeId: currentStore().storeId, storeName: currentStore().storeName }));
+      return goods.sort((a, b) => (a.storeName || "").localeCompare(b.storeName || "", "zh-CN") || a.name.localeCompare(b.name, "zh-CN"));
     }
 
     function allDates() {
@@ -164,9 +244,13 @@
     }
 
     function filteredRows() {
-      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name })))
+      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name, storeId: goods.storeId, storeName: goods.storeName })))
         .filter((row) => (!state.start || row.date >= state.start) && (!state.end || row.date <= state.end))
         .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name, "zh-CN"));
+    }
+
+    function selectedAllRows() {
+      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name, storeId: goods.storeId, storeName: goods.storeName })));
     }
 
     function groupedByDate(rows) {
@@ -186,7 +270,7 @@
 
     function setDefaultDates() {
       const dates = allDates();
-      state.start = dates[0] || "";
+      state.start = dates.at(-1) || "";
       state.end = dates.at(-1) || "";
       document.getElementById("startDate").value = state.start;
       document.getElementById("endDate").value = state.end;
@@ -195,7 +279,7 @@
     function renderStoreTabs() {
       const root = document.getElementById("storeTabs");
       root.innerHTML = "";
-      stores().forEach((store) => {
+      storeTabs().forEach((store) => {
         const button = document.createElement("button");
         button.className = store.storeId === state.storeId ? "tab active" : "tab";
         button.textContent = store.storeName;
@@ -233,6 +317,107 @@
       document.getElementById("amountTotal").textContent = `¥${money(amount)}`;
       document.getElementById("visitorTotal").textContent = int(visitors);
       document.getElementById("cvrAvg").textContent = pct(cvr);
+    }
+
+    function changePct(current, previous) {
+      if (!previous) return null;
+      return (Number(current || 0) - Number(previous || 0)) / Math.abs(Number(previous || 0)) * 100;
+    }
+
+    function fmtChange(value, suffix = "%") {
+      if (value === null || Number.isNaN(value) || !Number.isFinite(value)) return `<span class="badge flat">新增</span>`;
+      const cls = Math.abs(value) < 1 ? "flat" : value > 0 ? "up" : "down";
+      const sign = value > 0 ? "+" : "";
+      return `<span class="badge ${cls}">${sign}${value.toFixed(1)}${suffix}</span>`;
+    }
+
+    function estimatedAov(row) {
+      const orders = Number(row.visitors || 0) * Number(row.conversionRate || 0) / 100;
+      return orders ? Number(row.amount || 0) / orders : 0;
+    }
+
+    function diagnosisFor(row, prev) {
+      if (!prev) return "新数据，暂无对比";
+      const amountChg = changePct(row.amount, prev.amount);
+      const visitorChg = changePct(row.visitors, prev.visitors);
+      const cvrChg = Number(row.conversionRate || 0) - Number(prev.conversionRate || 0);
+      const aovChg = changePct(estimatedAov(row), estimatedAov(prev));
+      if (Math.abs(amountChg || 0) < 8) return "金额基本稳定";
+      const reasons = [];
+      if ((amountChg || 0) < -8) {
+        if ((visitorChg || 0) < -8) reasons.push("访客下降");
+        if (cvrChg < -1) reasons.push("转化率下降");
+        if ((aovChg || 0) < -8) reasons.push("客单价下降");
+        return reasons.length ? reasons.join(" + ") : "金额下降，需结合明细";
+      }
+      if ((visitorChg || 0) > 8) reasons.push("访客增长");
+      if (cvrChg > 1) reasons.push("转化率提升");
+      if ((aovChg || 0) > 8) reasons.push("客单价提升");
+      return reasons.length ? reasons.join(" + ") : "金额增长，结构较均衡";
+    }
+
+    function latestDateForRows(rows) {
+      return [...new Set(rows.map((row) => row.date))].sort().at(-1) || "";
+    }
+
+    function previousRecord(goods, date) {
+      return [...(goods.records || [])].filter((row) => row.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+    }
+
+    function renderOverview() {
+      const goods = selectedGoods();
+      const rows = selectedAllRows();
+      const latestDate = latestDateForRows(rows);
+      const latestRows = goods.map((goodsItem) => {
+        const row = (goodsItem.records || []).find((record) => record.date === latestDate);
+        return row ? { ...row, goodsId: goodsItem.goodsId, name: goodsItem.name, storeName: goodsItem.storeName, prev: previousRecord(goodsItem, latestDate) } : null;
+      }).filter(Boolean);
+      const amount = latestRows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      const visitors = latestRows.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
+      const cvr = visitors ? latestRows.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors : 0;
+      document.getElementById("yesterdayHint").textContent = latestDate ? `最近有数据日期：${latestDate}` : "暂无数据";
+      document.getElementById("yAmount").textContent = `¥${money(amount)}`;
+      document.getElementById("yVisitors").textContent = int(visitors);
+      document.getElementById("yCvr").textContent = pct(cvr);
+      document.getElementById("yGoodsCount").textContent = int(latestRows.length);
+      document.getElementById("yesterdayRows").innerHTML = latestRows.length ? latestRows.map((row) => {
+        const amountChg = changePct(row.amount, row.prev?.amount);
+        const diag = diagnosisFor(row, row.prev);
+        return `<tr>
+          <td>${row.storeName}</td><td>${row.name}</td><td>${row.goodsId}</td>
+          <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
+          <td>${fmtChange(amountChg)}</td><td class="diagnosis">${diag}</td>
+        </tr>`;
+      }).join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
+
+      const month = latestDate.slice(0, 7);
+      document.getElementById("monthHint").textContent = month ? `${month} 累计，截至 ${latestDate}` : "暂无数据";
+      const monthRows = goods.map((goodsItem) => {
+        const records = (goodsItem.records || []).filter((row) => row.date.startsWith(month) && row.date <= latestDate);
+        const amount = records.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+        const visitors = records.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
+        const cvr = visitors ? records.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors : 0;
+        return { goods: goodsItem, records, amount, visitors, cvr, avg: records.length ? amount / records.length : 0 };
+      }).filter((row) => row.records.length);
+      document.getElementById("monthRows").innerHTML = monthRows.length ? monthRows.map((row) => `<tr>
+        <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
+        <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.cvr)}</td>
+        <td>¥${money(row.avg)}</td><td>${int(row.records.length)}</td>
+      </tr>`).join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
+
+      const diagnosisRows = latestRows.map((row) => {
+        const prev = row.prev;
+        const cvrDiff = prev ? Number(row.conversionRate || 0) - Number(prev.conversionRate || 0) : null;
+        return `<tr>
+          <td>${row.storeName}</td><td>${row.name}</td><td>${row.date}</td>
+          <td>${fmtChange(changePct(row.amount, prev?.amount))}</td>
+          <td>${fmtChange(changePct(row.visitors, prev?.visitors))}</td>
+          <td>${cvrDiff === null ? '<span class="badge flat">新增</span>' : `<span class="badge ${Math.abs(cvrDiff) < 0.5 ? 'flat' : cvrDiff > 0 ? 'up' : 'down'}">${cvrDiff > 0 ? '+' : ''}${cvrDiff.toFixed(2)}pt</span>`}</td>
+          <td>${fmtChange(changePct(estimatedAov(row), prev ? estimatedAov(prev) : 0))}</td>
+          <td class="diagnosis">${diagnosisFor(row, prev)}</td>
+        </tr>`;
+      });
+      document.getElementById("diagnosisRows").innerHTML = diagnosisRows.length ? diagnosisRows.join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
     }
 
     function niceScale(maxValue, tickCount = 4) {
@@ -430,7 +615,7 @@
       root.innerHTML = [...rows].sort((a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name, "zh-CN")).map((row) => `
         <tr>
           <td>${row.date}</td>
-          <td>${row.name}</td>
+          <td>${row.storeName ? `${row.storeName} / ` : ""}${row.name}</td>
           <td>${row.goodsId}</td>
           <td>¥${money(row.amount)}</td>
           <td>${int(row.visitors)}</td>
@@ -454,6 +639,7 @@
       renderGoodsTabs();
       const rows = filteredRows();
       const dateRows = groupedByDate(rows);
+      renderOverview();
       renderMetrics(rows);
       drawAmountChart("amountChart", dateRows);
       drawVisitorCvrChart("visitorChart", dateRows);
@@ -473,7 +659,7 @@
       .then((response) => response.json())
       .then((data) => {
         state.data = data;
-        state.storeId = stores()[0]?.storeId || "";
+        state.storeId = "all";
         document.getElementById("updatedAt").textContent = `更新：${data.updatedAt || "暂无"}`;
         setDefaultDates();
         render();
