@@ -115,6 +115,18 @@
         </div>
         <div id="seriesBlocks"></div>
       </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>近 7 天系列日销</h2>
+          <span class="hint" id="last7Text">按当前日期向前追踪</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="last7Head"></thead>
+            <tbody id="last7Rows"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
 
     <section id="weeksView" class="hidden">
@@ -125,7 +137,7 @@
       <section class="panel">
         <div class="panel-head">
           <h2>系列周趋势</h2>
-          <span class="hint">周维度按自然月 1-7、8-14、15-21、22-28、29-31 汇总</span>
+          <span class="hint">周维度按自然月 1-7、8-14、15-21、22-月底汇总</span>
         </div>
         <div class="table-wrap">
           <table>
@@ -233,6 +245,24 @@
       return reasons.length ? reasons.join(" + ") : "金额增长，结构均衡";
     }
 
+    function periodDiagnosis(current, previous) {
+      if (!previous || !previous.amount) return "暂无上周对比";
+      const amountChg = changePct(current.amount, previous.amount) || 0;
+      const visitorChg = changePct(current.visitors, previous.visitors) || 0;
+      const cvrChg = Number(current.cvr || 0) - Number(previous.cvr || 0);
+      if (Math.abs(amountChg) < 8) return "本周基本稳定";
+      const direction = amountChg > 0 ? "增长" : "下降";
+      const reasons = [];
+      if (amountChg > 0) {
+        if (visitorChg > 8) reasons.push("访客拉动");
+        if (cvrChg > 1) reasons.push("转化提升");
+      } else {
+        if (visitorChg < -8) reasons.push("访客拖累");
+        if (cvrChg < -1) reasons.push("转化拖累");
+      }
+      return reasons.length ? `${direction}：${reasons.join(" + ")}` : `${direction}：需看 ID 构成`;
+    }
+
     function groupBySeries(items) {
       const map = new Map();
       items.forEach((item) => {
@@ -309,10 +339,50 @@
           </div>
         </details>`;
       }).join("");
+
+      renderLast7(date, items);
+    }
+
+    function lastNDatesUntil(date, n) {
+      const dates = allDates().filter((d) => d <= date);
+      return dates.slice(Math.max(0, dates.length - n));
+    }
+
+    function renderLast7(date, items) {
+      const dates = lastNDatesUntil(date, 7);
+      document.getElementById("last7Text").textContent = dates.length ? `${dates[0]} 至 ${dates.at(-1)}` : "暂无数据";
+      document.getElementById("last7Head").innerHTML = `<tr><th>系列</th>${dates.map((d) => `<th>${d.slice(5)}<br><span class="hint">成交 / 访客 / 转化</span></th>`).join("")}<th>7日合计</th><th>趋势判断</th></tr>`;
+      document.getElementById("last7Rows").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
+        const dayAggs = dates.map((d) => aggregate(goodsItems.map((goods) => rowFor(goods, d)).filter(Boolean)));
+        const total = aggregate(goodsItems.flatMap((goods) => (goods.records || []).filter((row) => dates.includes(row.date))));
+        const first = dayAggs.find((agg) => agg.count);
+        const last = [...dayAggs].reverse().find((agg) => agg.count);
+        const trend = first && last && first !== last ? periodDiagnosis(last, first) : "数据较少，继续观察";
+        const cells = dayAggs.map((agg) => `<td>${agg.count ? `¥${money(agg.amount)}<br><span class="hint">${int(agg.visitors)} / ${pct(agg.cvr)}</span>` : "-"}</td>`).join("");
+        return `<tr><td>${series}</td>${cells}<td>¥${money(total.amount)}<br><span class="hint">${int(total.visitors)} / ${pct(total.cvr)}</span></td><td class="diagnosis">${trend}</td></tr>`;
+      }).join("");
     }
 
     function weekIndex(date) {
-      return Math.ceil(Number(date.slice(8, 10)) / 7);
+      const day = Number(date.slice(8, 10));
+      if (day <= 7) return 1;
+      if (day <= 14) return 2;
+      if (day <= 21) return 3;
+      return 4;
+    }
+
+    function weekLabel(month, week) {
+      const y = Number(month.slice(0, 4));
+      const m = Number(month.slice(5));
+      const lastDay = new Date(y, m, 0).getDate();
+      const ranges = [
+        [1, 7],
+        [8, 14],
+        [15, 21],
+        [22, lastDay]
+      ];
+      const [start, end] = ranges[week - 1];
+      return `${m}/${start}-${m}/${end}`;
     }
 
     function monthOfLatest() {
@@ -320,7 +390,7 @@
     }
 
     function weekBuckets(records, month) {
-      const buckets = [1, 2, 3, 4, 5].map((week) => ({ week, rows: [] }));
+      const buckets = [1, 2, 3, 4].map((week) => ({ week, rows: [] }));
       records.filter((row) => row.date.startsWith(month)).forEach((row) => buckets[weekIndex(row.date) - 1].rows.push(row));
       return buckets;
     }
@@ -336,15 +406,24 @@
       const month = monthOfLatest();
       const items = allItems();
       document.getElementById("weekMonthText").textContent = month ? `${month} 周维度，截至 ${latestDate()}` : "暂无数据";
-      const weekHeaders = [1, 2, 3, 4, 5].map((w) => `<th>${Number(month.slice(5))}月第${w}周<br><span class="hint">成交 / 访客 / 转化</span></th>`).join("");
-      document.getElementById("seriesWeekHead").innerHTML = `<tr><th>系列</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th></tr>`;
+      const weekHeaders = [1, 2, 3, 4].map((w) => `<th>第${w}周<br><span class="hint">${weekLabel(month, w)} · 成交 / 访客 / 转化</span></th>`).join("");
+      document.getElementById("seriesWeekHead").innerHTML = `<tr><th>系列</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th><th>周趋势判断</th><th>主要 ID</th></tr>`;
       document.getElementById("seriesWeekRows").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
         const records = goodsItems.flatMap((goods) => (goods.records || []));
         const buckets = weekBuckets(records, month);
         const monthAgg = aggregate(records.filter((row) => row.date.startsWith(month)));
-        const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows).amount);
-        const wow = filled.length >= 2 ? changePct(filled.at(-1), filled.at(-2)) : null;
-        return `<tr><td>${series}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td></tr>`;
+        const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows));
+        const latest = filled.at(-1);
+        const previous = filled.length >= 2 ? filled.at(-2) : null;
+        const wow = latest && previous ? changePct(latest.amount, previous.amount) : null;
+        const latestWeek = buckets.filter((bucket) => bucket.rows.length).at(-1);
+        const byGoods = goodsItems.map((goods) => {
+          const current = aggregate((goods.records || []).filter((row) => row.date.startsWith(month) && weekIndex(row.date) === latestWeek?.week));
+          const prev = aggregate((goods.records || []).filter((row) => row.date.startsWith(month) && weekIndex(row.date) === (latestWeek?.week || 0) - 1));
+          return { goods, current, change: changePct(current.amount, prev.amount) };
+        }).filter((item) => item.current.count).sort((a, b) => Math.abs(b.change || 0) - Math.abs(a.change || 0));
+        const keyGoods = byGoods[0] ? `${byGoods[0].change >= 0 ? "拉动" : "拖累"}：${byGoods[0].goods.name}` : "-";
+        return `<tr><td>${series}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td><td class="diagnosis">${keyGoods}</td></tr>`;
       }).join("");
 
       document.getElementById("idWeekBlocks").innerHTML = groupBySeries(items).map(([series, goodsItems]) => `<details>
@@ -356,14 +435,16 @@
         <div class="details-body">
           <div class="table-wrap">
             <table>
-              <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th></tr></thead>
+              <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th><th>周趋势判断</th></tr></thead>
               <tbody>${goodsItems.map((goods) => {
                 const records = goods.records || [];
                 const buckets = weekBuckets(records, month);
                 const monthAgg = aggregate(records.filter((row) => row.date.startsWith(month)));
-                const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows).amount);
-                const wow = filled.length >= 2 ? changePct(filled.at(-1), filled.at(-2)) : null;
-                return `<tr><td>${goods.storeName}</td><td>${goods.name}</td><td>${goods.goodsId}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td></tr>`;
+                const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows));
+                const latest = filled.at(-1);
+                const previous = filled.length >= 2 ? filled.at(-2) : null;
+                const wow = latest && previous ? changePct(latest.amount, previous.amount) : null;
+                return `<tr><td>${goods.storeName}</td><td>${goods.name}</td><td>${goods.goodsId}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td><td class="diagnosis">${periodDiagnosis(latest, previous)}</td></tr>`;
               }).join("")}</tbody>
             </table>
           </div>
