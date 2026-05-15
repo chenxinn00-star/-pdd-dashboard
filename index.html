@@ -118,7 +118,7 @@
       <section class="panel">
         <div class="panel-head">
           <h2>近 7 天系列日销</h2>
-          <span class="hint" id="last7Text">按当前日期向前追踪</span>
+          <span class="hint"><span id="last7Text">按当前日期向前追踪</span>；黑色为成交金额，灰色为访客数 / 转化率</span>
         </div>
         <div class="table-wrap">
           <table>
@@ -496,7 +496,7 @@
     function renderLast7(date, items) {
       const dates = lastNDatesUntil(date, 7);
       document.getElementById("last7Text").textContent = dates.length ? `${dates[0]} 至 ${dates.at(-1)}` : "暂无数据";
-      document.getElementById("last7Head").innerHTML = `<tr><th>系列</th>${dates.map((d) => `<th>${d.slice(5)}<br><span class="hint">成交 / 访客 / 转化</span></th>`).join("")}<th>7日合计</th><th>趋势判断</th></tr>`;
+      document.getElementById("last7Head").innerHTML = `<tr><th>系列</th>${dates.map((d) => `<th>${d.slice(5)}<br><span class="hint">黑：成交｜灰：访客/转化</span></th>`).join("")}<th>7日合计<br><span class="hint">黑：成交｜灰：访客/转化</span></th><th>趋势判断</th></tr>`;
       document.getElementById("last7Rows").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
         const dayAggs = dates.map((d) => aggregate(goodsItems.map((goods) => rowFor(goods, d)).filter(Boolean)));
         const total = aggregate(goodsItems.flatMap((goods) => (goods.records || []).filter((row) => dates.includes(row.date))));
