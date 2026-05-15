@@ -28,6 +28,9 @@
     button { font: inherit; cursor: pointer; }
     .tab { border: 0; background: transparent; color: #667085; padding: 0 16px 13px; font-weight: 750; border-bottom: 3px solid transparent; }
     .tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .controls { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .controls label { color: #667085; font-size: 13px; font-weight: 750; }
+    select { height: 38px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; background: #fff; color: var(--ink); font: inherit; min-width: 160px; }
     .topline { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 16px; }
     h1 { font-size: 22px; margin: 0; }
     h2 { font-size: 17px; margin: 0; }
@@ -70,6 +73,7 @@
       .cards { grid-template-columns: 1fr 1fr; }
       summary { grid-template-columns: 1fr; }
       .tabs { padding-left: 18px; overflow-x: auto; }
+      .controls { align-items: stretch; flex-direction: column; }
     }
   </style>
 </head>
@@ -79,19 +83,29 @@
     <div class="updated" id="updatedAt">读取中...</div>
   </header>
   <nav class="tabs">
-    <button class="tab active" data-view="yesterday">昨日表现</button>
+    <button class="tab active" data-view="day">单日表现</button>
     <button class="tab" data-view="weeks">本月周趋势</button>
   </nav>
   <main>
-    <section id="yesterdayView">
+    <section class="controls">
+      <label for="viewSelect">查看口径</label>
+      <select id="viewSelect">
+        <option value="day">单日表现</option>
+        <option value="weeks">本月周趋势</option>
+      </select>
+      <label for="dateSelect" id="dateSelectLabel">选择日期</label>
+      <select id="dateSelect"></select>
+    </section>
+
+    <section id="dayView">
       <div class="topline">
-        <h1>昨日系列表现</h1>
+        <h1>单日系列表现</h1>
         <div class="hint" id="latestDateText">最近有数据日期</div>
       </div>
       <section class="cards">
-        <article class="card green"><div class="label">昨日总成交</div><div class="value" id="totalAmount">¥0.00</div></article>
-        <article class="card blue"><div class="label">昨日总访客</div><div class="value" id="totalVisitors">0</div></article>
-        <article class="card orange"><div class="label">昨日加权转化率</div><div class="value" id="totalCvr">0.00%</div></article>
+        <article class="card green"><div class="label">单日总成交</div><div class="value" id="totalAmount">¥0.00</div></article>
+        <article class="card blue"><div class="label">单日总访客</div><div class="value" id="totalVisitors">0</div></article>
+        <article class="card orange"><div class="label">单日加权转化率</div><div class="value" id="totalCvr">0.00%</div></article>
         <article class="card"><div class="label">监控系列 / 商品</div><div class="value" id="totalCount">0 / 0</div></article>
       </section>
       <section class="panel">
@@ -146,7 +160,7 @@
     const money = (v) => Number(v || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const int = (v) => Number(v || 0).toLocaleString("zh-CN");
     const pct = (v) => `${Number(v || 0).toFixed(2)}%`;
-    const state = { data: null, view: "yesterday" };
+    const state = { data: null, view: "day", selectedDate: "" };
 
     function allItems() {
       return Object.values(state.data?.stores || {}).flatMap((store) =>
@@ -165,6 +179,10 @@
 
     function latestDate() {
       return allDates().at(-1) || "";
+    }
+
+    function selectedDate() {
+      return state.selectedDate || latestDate();
     }
 
     function previousRecord(goods, date) {
@@ -229,12 +247,22 @@
       return row ? { ...row, goods } : null;
     }
 
-    function renderYesterday() {
-      const date = latestDate();
+    function renderDateOptions() {
+      const dates = allDates();
+      const select = document.getElementById("dateSelect");
+      select.innerHTML = dates.map((date) => `<option value="${date}">${date}</option>`).join("");
+      if (!state.selectedDate || !dates.includes(state.selectedDate)) state.selectedDate = dates.at(-1) || "";
+      select.value = state.selectedDate;
+      document.getElementById("dateSelect").classList.toggle("hidden", state.view !== "day");
+      document.getElementById("dateSelectLabel").classList.toggle("hidden", state.view !== "day");
+    }
+
+    function renderDay() {
+      const date = selectedDate();
       const items = allItems();
       const latestRows = items.map((goods) => rowFor(goods, date)).filter(Boolean);
       const total = aggregate(latestRows);
-      document.getElementById("latestDateText").textContent = date ? `最新数据日期：${date}` : "暂无数据";
+      document.getElementById("latestDateText").textContent = date ? `当前查看日期：${date}` : "暂无数据";
       document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
       document.getElementById("totalVisitors").textContent = int(total.visitors);
       document.getElementById("totalCvr").textContent = pct(total.cvr);
@@ -260,8 +288,8 @@
         return `<details open>
           <summary>
             <div class="series-name">${series}</div>
-            <div class="summary-metric"><span class="label">昨日成交</span><span class="value">¥${money(current.amount)}</span></div>
-            <div class="summary-metric"><span class="label">昨日访客</span><span class="value">${int(current.visitors)}</span></div>
+            <div class="summary-metric"><span class="label">单日成交</span><span class="value">¥${money(current.amount)}</span></div>
+            <div class="summary-metric"><span class="label">单日访客</span><span class="value">${int(current.visitors)}</span></div>
             <div class="summary-metric"><span class="label">加权转化率</span><span class="value">${pct(current.cvr)}</span></div>
             <div class="summary-metric"><span class="label">金额变化</span><span class="value">${badge(amountChg)}</span></div>
             <div class="summary-metric"><span class="label">初判</span><span class="value">${seriesDiag}</span></div>
@@ -344,19 +372,28 @@
     }
 
     function render() {
-      renderYesterday();
+      renderDateOptions();
+      renderDay();
       renderWeeks();
-      document.getElementById("yesterdayView").classList.toggle("hidden", state.view !== "yesterday");
+      document.getElementById("dayView").classList.toggle("hidden", state.view !== "day");
       document.getElementById("weeksView").classList.toggle("hidden", state.view !== "weeks");
     }
 
+    function setView(view) {
+      state.view = view;
+      document.getElementById("viewSelect").value = view;
+      document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.view === view));
+      render();
+    }
+
     document.querySelectorAll(".tab").forEach((button) => {
-      button.onclick = () => {
-        state.view = button.dataset.view;
-        document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab === button));
-        render();
-      };
+      button.onclick = () => setView(button.dataset.view);
     });
+    document.getElementById("viewSelect").onchange = (event) => setView(event.target.value);
+    document.getElementById("dateSelect").onchange = (event) => {
+      state.selectedDate = event.target.value;
+      render();
+    };
 
     fetch("pdd_data.json?ts=" + Date.now())
       .then((response) => response.json())
