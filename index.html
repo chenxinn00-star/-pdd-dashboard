@@ -9,314 +9,173 @@
       --ink: #1f2933;
       --muted: #8a94a6;
       --line: #e5e7eb;
-      --soft: #f5f6f8;
-      --panel: #ffffff;
+      --bg: #f3f4f6;
+      --panel: #fff;
       --green: #4f9f7a;
       --blue: #4f8edb;
       --orange: #d97732;
-      --red: #c2410c;
+      --red: #b42318;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: #f3f4f6; }
-    header { height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--line); }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
+    header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 750; }
     .brand strong { color: #c0392b; font-size: 18px; }
     .brand span { color: var(--muted); border-left: 1px solid var(--line); padding-left: 12px; }
     .updated { color: var(--muted); font-size: 13px; }
-    .store-tabs, .goods-tabs { display: flex; align-items: center; gap: 10px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--line); overflow-x: auto; }
-    .store-tabs { height: 52px; }
-    .goods-tabs { height: 56px; }
+    main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 44px; }
+    .tabs { display: flex; gap: 8px; padding: 14px 28px 0; background: #fff; border-bottom: 1px solid var(--line); }
     button { font: inherit; cursor: pointer; }
-    .tab { height: 100%; border: 0; background: transparent; color: #656d7b; padding: 0 14px; border-bottom: 3px solid transparent; font-weight: 650; white-space: nowrap; }
+    .tab { border: 0; background: transparent; color: #667085; padding: 0 16px 13px; font-weight: 750; border-bottom: 3px solid transparent; }
     .tab.active { color: var(--green); border-bottom-color: var(--green); }
-    main { max-width: 1280px; margin: 0 auto; padding: 24px 28px 40px; }
-    .filters { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 4px 0 22px; flex-wrap: wrap; }
-    .filters label { color: #6b7280; font-weight: 650; }
-    input[type="date"] { height: 36px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; background: #fff; color: var(--ink); }
-    .btn { height: 36px; border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 0 14px; color: var(--ink); }
-    .btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
-    .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
-    .metric-card, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
-    .metric-card { padding: 18px 20px; min-height: 110px; }
-    .metric-card .label { color: var(--muted); font-size: 14px; font-weight: 650; }
-    .metric-card .value { margin-top: 10px; font-size: 30px; line-height: 1; font-weight: 750; }
-    .metric-card .unit { margin-top: 8px; color: #a0a7b3; font-size: 13px; }
-    .metric-card.green .value { color: var(--green); }
-    .metric-card.blue .value { color: var(--blue); }
-    .metric-card.orange .value { color: var(--orange); }
-    .panel { padding: 20px; margin-bottom: 18px; }
-    .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-    .panel-title h2 { margin: 0; font-size: 16px; }
-    .legend { display: flex; gap: 16px; flex-wrap: wrap; color: #6b7280; font-size: 13px; }
-    .legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; background: var(--color); }
-    svg { width: 100%; height: 300px; display: block; }
+    .topline { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 16px; }
+    h1 { font-size: 22px; margin: 0; }
+    h2 { font-size: 17px; margin: 0; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .card, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(16,24,40,.04); }
+    .card { padding: 16px 18px; min-height: 100px; }
+    .card .label { color: var(--muted); font-size: 13px; font-weight: 700; }
+    .card .value { margin-top: 8px; font-size: 30px; line-height: 1.05; font-weight: 800; }
+    .card.green .value { color: var(--green); }
+    .card.blue .value { color: var(--blue); }
+    .card.orange .value { color: var(--orange); }
+    .panel { padding: 18px; margin-bottom: 18px; }
+    .panel-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 14px; }
     .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
     table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; }
     th, td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
-    th { color: #6b7280; background: #f8fafc; font-weight: 650; }
+    th { color: #667085; background: #f8fafc; font-weight: 750; }
     th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
     tbody tr:last-child td { border-bottom: 0; }
-    .empty { color: var(--muted); padding: 22px; text-align: center; }
-    .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
-    .section-title h2 { margin: 0; font-size: 18px; }
-    .section-title .hint { color: var(--muted); font-size: 13px; }
-    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
-    .mini-card { background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; padding: 13px 14px; }
-    .mini-card .label { color: var(--muted); font-size: 12px; font-weight: 650; }
-    .mini-card .value { margin-top: 6px; font-size: 22px; font-weight: 760; }
-    .mini-card.green .value { color: var(--green); }
-    .mini-card.blue .value { color: var(--blue); }
-    .mini-card.orange .value { color: var(--orange); }
-    .mini-card.dark .value { color: var(--ink); }
-    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 56px; height: 24px; border-radius: 999px; padding: 0 9px; font-weight: 700; font-size: 12px; }
-    .badge.up { color: #b42318; background: #fff1f0; }
+    details { border: 1px solid var(--line); border-radius: 10px; background: #fff; margin-bottom: 12px; overflow: hidden; }
+    summary { list-style: none; cursor: pointer; padding: 16px 18px; display: grid; grid-template-columns: 1.15fr repeat(5, minmax(120px, 1fr)); gap: 12px; align-items: center; border-bottom: 1px solid transparent; }
+    details[open] summary { border-bottom-color: var(--line); }
+    summary::-webkit-details-marker { display: none; }
+    .series-name { font-size: 18px; font-weight: 800; }
+    .summary-metric .label { display: block; color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .summary-metric .value { font-weight: 800; }
+    .details-body { padding: 14px 16px 16px; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; height: 24px; border-radius: 999px; padding: 0 9px; font-size: 12px; font-weight: 800; }
+    .badge.up { color: var(--red); background: #fff1f0; }
     .badge.down { color: #027a48; background: #ecfdf3; }
     .badge.flat { color: #667085; background: #f2f4f7; }
-    .diagnosis { color: #344054; font-weight: 650; }
-    .danger { color: #b42318; }
-    .good { color: #027a48; }
-    @media (max-width: 860px) {
+    .diagnosis { font-weight: 750; color: #344054; }
+    .empty { color: var(--muted); padding: 22px; text-align: center; }
+    .hidden { display: none; }
+    @media (max-width: 900px) {
       header { display: block; height: auto; padding: 14px 18px; }
       .updated { margin-top: 6px; }
       main { padding: 18px; }
-      .store-tabs, .goods-tabs { padding: 0 18px; }
-      .cards { grid-template-columns: 1fr; }
-      .mini-grid { grid-template-columns: 1fr 1fr; }
-      svg { height: 240px; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      summary { grid-template-columns: 1fr; }
+      .tabs { padding-left: 18px; overflow-x: auto; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand"><strong>拼多多数据看板</strong><span>多店铺商品监控</span></div>
+    <div class="brand"><strong>拼多多数据看板</strong><span>系列经营日报</span></div>
     <div class="updated" id="updatedAt">读取中...</div>
   </header>
-  <nav class="store-tabs" id="storeTabs"></nav>
-  <nav class="goods-tabs" id="goodsTabs"></nav>
+  <nav class="tabs">
+    <button class="tab active" data-view="yesterday">昨日表现</button>
+    <button class="tab" data-view="weeks">本月周趋势</button>
+  </nav>
   <main>
-    <section class="panel">
-      <div class="section-title">
-        <h2>昨日每 ID 明细</h2>
-        <span class="hint" id="yesterdayHint">最近有数据日期</span>
+    <section id="yesterdayView">
+      <div class="topline">
+        <h1>昨日系列表现</h1>
+        <div class="hint" id="latestDateText">最近有数据日期</div>
       </div>
-      <div class="mini-grid">
-        <div class="mini-card green"><div class="label">昨日成交金额</div><div class="value" id="yAmount">¥0.00</div></div>
-        <div class="mini-card blue"><div class="label">昨日访客数</div><div class="value" id="yVisitors">0</div></div>
-        <div class="mini-card orange"><div class="label">昨日加权转化率</div><div class="value" id="yCvr">0.00%</div></div>
-        <div class="mini-card dark"><div class="label">监控商品数</div><div class="value" id="yGoodsCount">0</div></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>较前次金额</th><th>初判</th></tr>
-          </thead>
-          <tbody id="yesterdayRows"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="section-title">
-        <h2>本月截至最新数据累计</h2>
-        <span class="hint" id="monthHint">按最新数据月份统计</span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>店铺</th><th>商品</th><th>商品ID</th><th>累计成交金额</th><th>累计访客</th><th>加权转化率</th><th>日均成交</th><th>有数据天数</th></tr>
-          </thead>
-          <tbody id="monthRows"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="section-title">
-        <h2>波动诊断</h2>
-        <span class="hint">金额变化拆成访客、转化率、客单价三个方向</span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>店铺</th><th>商品</th><th>日期</th><th>金额变化</th><th>访客变化</th><th>转化率变化</th><th>客单价变化</th><th>原因初判</th></tr>
-          </thead>
-          <tbody id="diagnosisRows"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="filters">
-      <label>日期</label>
-      <input type="date" id="startDate">
-      <span>至</span>
-      <input type="date" id="endDate">
-      <button class="btn primary" id="applyDate">查看</button>
-      <button class="btn" data-range="7">近7天</button>
-      <button class="btn" data-range="30">近30天</button>
-    </section>
-
-    <section class="cards">
-      <article class="metric-card green">
-        <div class="label">成交金额合计</div>
-        <div class="value" id="amountTotal">¥0.00</div>
-        <div class="unit">元</div>
-      </article>
-      <article class="metric-card blue">
-        <div class="label">访客数合计</div>
-        <div class="value" id="visitorTotal">0</div>
-        <div class="unit">人次</div>
-      </article>
-      <article class="metric-card orange">
-        <div class="label">平均转化率</div>
-        <div class="value" id="cvrAvg">0.00%</div>
-        <div class="unit">成交转化率</div>
-      </article>
-    </section>
-
-    <section class="panel">
-      <div class="panel-title">
-        <h2>每日成交金额（元）</h2>
-        <div class="legend"><span style="--color: var(--green)">成交金额</span></div>
-      </div>
-      <svg id="amountChart"></svg>
-    </section>
-
-    <section class="panel">
-      <div class="panel-title">
-        <h2>每日访客数 & 转化率</h2>
-        <div class="legend">
-          <span style="--color: var(--blue)">访客数</span>
-          <span style="--color: var(--orange)">转化率（右轴）</span>
+      <section class="cards">
+        <article class="card green"><div class="label">昨日总成交</div><div class="value" id="totalAmount">¥0.00</div></article>
+        <article class="card blue"><div class="label">昨日总访客</div><div class="value" id="totalVisitors">0</div></article>
+        <article class="card orange"><div class="label">昨日加权转化率</div><div class="value" id="totalCvr">0.00%</div></article>
+        <article class="card"><div class="label">监控系列 / 商品</div><div class="value" id="totalCount">0 / 0</div></article>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>系列总览与 ID 构成</h2>
+          <span class="hint">展开系列可查看具体 ID 的表现和原因</span>
         </div>
-      </div>
-      <svg id="visitorChart"></svg>
+        <div id="seriesBlocks"></div>
+      </section>
     </section>
 
-    <section class="panel">
-      <div class="panel-title"><h2>每日明细</h2></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>日期</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>成交转化率</th></tr>
-          </thead>
-          <tbody id="detailRows"></tbody>
-        </table>
+    <section id="weeksView" class="hidden">
+      <div class="topline">
+        <h1>本月周维度跟踪</h1>
+        <div class="hint" id="weekMonthText">按最新数据月份统计</div>
       </div>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>系列周趋势</h2>
+          <span class="hint">周维度按自然月 1-7、8-14、15-21、22-28、29-31 汇总</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="seriesWeekHead"></thead>
+            <tbody id="seriesWeekRows"></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>ID 周趋势明细</h2>
+          <span class="hint">用于定位系列内哪个 ID 拉动或拖累</span>
+        </div>
+        <div id="idWeekBlocks"></div>
+      </section>
     </section>
   </main>
 
   <script>
-    const money = (value) => Number(value || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const int = (value) => Number(value || 0).toLocaleString("zh-CN");
-    const pct = (value) => `${Number(value || 0).toFixed(2)}%`;
-    const ymd = (date) => date.toISOString().slice(0, 10);
-    const state = { data: null, storeId: "", goodsId: "summary", start: "", end: "" };
+    const SERIES = {
+      "907458671037": "无水酵素",
+      "917048822440": "无水酵素",
+      "911804836948": "红花清火",
+      "932697304345": "小香管",
+      "933599709509": "小香管",
+      "942700333004": "小香管",
+      "943153713868": "小香管",
+      "39194042": "专效"
+    };
+    const NAME_FIX = { "933599709509": "官旗小香管+光泽次链" };
+    const SERIES_ORDER = ["小香管", "无水酵素", "红花清火", "专效"];
+    const money = (v) => Number(v || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const int = (v) => Number(v || 0).toLocaleString("zh-CN");
+    const pct = (v) => `${Number(v || 0).toFixed(2)}%`;
+    const state = { data: null, view: "yesterday" };
 
-    function stores() {
-      return Object.values(state.data?.stores || {});
-    }
-
-    function storeTabs() {
-      return [{ storeId: "all", storeName: "全部店铺", goods: {} }, ...stores()];
-    }
-
-    function currentStore() {
-      if (state.storeId === "all") return { storeId: "all", storeName: "全部店铺", goods: Object.fromEntries(allGoods().map((goods) => [goods.goodsId, goods])) };
-      return state.data.stores[state.storeId] || stores()[0];
-    }
-
-    function allGoods() {
-      return stores().flatMap((store) => Object.values(store.goods || {}).map((goods) => ({ ...goods, storeId: store.storeId, storeName: store.storeName })));
-    }
-
-    function goodsList() {
-      const goods = state.storeId === "all" ? allGoods() : Object.values(currentStore()?.goods || {}).map((goods) => ({ ...goods, storeId: currentStore().storeId, storeName: currentStore().storeName }));
-      return goods.sort((a, b) => (a.storeName || "").localeCompare(b.storeName || "", "zh-CN") || a.name.localeCompare(b.name, "zh-CN"));
+    function allItems() {
+      return Object.values(state.data?.stores || {}).flatMap((store) =>
+        Object.values(store.goods || {}).map((goods) => ({
+          ...goods,
+          name: NAME_FIX[goods.goodsId] || goods.name,
+          storeName: store.storeName,
+          series: SERIES[goods.goodsId] || "未分类"
+        }))
+      );
     }
 
     function allDates() {
-      return [...new Set(stores().flatMap((store) => Object.values(store.goods || {}).flatMap((goods) => (goods.records || []).map((row) => row.date))))].sort();
+      return [...new Set(allItems().flatMap((goods) => (goods.records || []).map((row) => row.date)))].sort();
     }
 
-    function selectedGoods() {
-      if (state.goodsId === "summary") return goodsList();
-      return goodsList().filter((goods) => goods.goodsId === state.goodsId);
+    function latestDate() {
+      return allDates().at(-1) || "";
     }
 
-    function filteredRows() {
-      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name, storeId: goods.storeId, storeName: goods.storeName })))
-        .filter((row) => (!state.start || row.date >= state.start) && (!state.end || row.date <= state.end))
-        .sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name, "zh-CN"));
+    function previousRecord(goods, date) {
+      return [...(goods.records || [])].filter((row) => row.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
     }
 
-    function selectedAllRows() {
-      return selectedGoods().flatMap((goods) => (goods.records || []).map((row) => ({ ...row, goodsId: goods.goodsId, name: goods.name, storeId: goods.storeId, storeName: goods.storeName })));
-    }
-
-    function groupedByDate(rows) {
-      const map = new Map();
-      rows.forEach((row) => {
-        const item = map.get(row.date) || { date: row.date, amount: 0, visitors: 0, cvrWeighted: 0 };
-        item.amount += Number(row.amount || 0);
-        const visitors = Number(row.visitors || 0);
-        item.visitors += visitors;
-        item.cvrWeighted += Number(row.conversionRate || 0) * visitors;
-        map.set(row.date, item);
-      });
-      return [...map.values()]
-        .map((row) => ({ ...row, conversionRate: row.visitors ? row.cvrWeighted / row.visitors : 0 }))
-        .sort((a, b) => a.date.localeCompare(b.date));
-    }
-
-    function setDefaultDates() {
-      const dates = allDates();
-      state.start = dates.at(-1) || "";
-      state.end = dates.at(-1) || "";
-      document.getElementById("startDate").value = state.start;
-      document.getElementById("endDate").value = state.end;
-    }
-
-    function renderStoreTabs() {
-      const root = document.getElementById("storeTabs");
-      root.innerHTML = "";
-      storeTabs().forEach((store) => {
-        const button = document.createElement("button");
-        button.className = store.storeId === state.storeId ? "tab active" : "tab";
-        button.textContent = store.storeName;
-        button.onclick = () => {
-          state.storeId = store.storeId;
-          state.goodsId = "summary";
-          render();
-        };
-        root.appendChild(button);
-      });
-    }
-
-    function renderGoodsTabs() {
-      const root = document.getElementById("goodsTabs");
-      root.innerHTML = "";
-      const items = [{ goodsId: "summary", name: "汇总" }, ...goodsList()];
-      items.forEach((goods) => {
-        const button = document.createElement("button");
-        button.className = goods.goodsId === state.goodsId ? "tab active" : "tab";
-        button.textContent = goods.goodsId === "summary" ? "汇总" : goods.name;
-        button.onclick = () => {
-          state.goodsId = goods.goodsId;
-          render();
-        };
-        root.appendChild(button);
-      });
-    }
-
-    function renderMetrics(rows) {
-      const amount = rows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
-      const visitors = rows.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
-      const cvr = visitors
-        ? rows.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors
-        : 0;
-      document.getElementById("amountTotal").textContent = `¥${money(amount)}`;
-      document.getElementById("visitorTotal").textContent = int(visitors);
-      document.getElementById("cvrAvg").textContent = pct(cvr);
+    function aggregate(rows) {
+      const amount = rows.reduce((s, r) => s + Number(r.amount || 0), 0);
+      const visitors = rows.reduce((s, r) => s + Number(r.visitors || 0), 0);
+      const cvr = visitors ? rows.reduce((s, r) => s + Number(r.conversionRate || 0) * Number(r.visitors || 0), 0) / visitors : 0;
+      return { amount, visitors, cvr, count: rows.length };
     }
 
     function changePct(current, previous) {
@@ -324,344 +183,186 @@
       return (Number(current || 0) - Number(previous || 0)) / Math.abs(Number(previous || 0)) * 100;
     }
 
-    function fmtChange(value, suffix = "%") {
-      if (value === null || Number.isNaN(value) || !Number.isFinite(value)) return `<span class="badge flat">新增</span>`;
-      const cls = Math.abs(value) < 1 ? "flat" : value > 0 ? "up" : "down";
-      const sign = value > 0 ? "+" : "";
-      return `<span class="badge ${cls}">${sign}${value.toFixed(1)}${suffix}</span>`;
-    }
-
     function estimatedAov(row) {
       const orders = Number(row.visitors || 0) * Number(row.conversionRate || 0) / 100;
       return orders ? Number(row.amount || 0) / orders : 0;
     }
 
-    function diagnosisFor(row, prev) {
+    function badge(value, suffix = "%") {
+      if (value === null || !Number.isFinite(value)) return `<span class="badge flat">新增</span>`;
+      const cls = Math.abs(value) < 1 ? "flat" : value > 0 ? "up" : "down";
+      const sign = value > 0 ? "+" : "";
+      return `<span class="badge ${cls}">${sign}${value.toFixed(1)}${suffix}</span>`;
+    }
+
+    function diagnosis(row, prev) {
       if (!prev) return "新数据，暂无对比";
-      const amountChg = changePct(row.amount, prev.amount);
-      const visitorChg = changePct(row.visitors, prev.visitors);
+      const amountChg = changePct(row.amount, prev.amount) || 0;
+      const visitorChg = changePct(row.visitors, prev.visitors) || 0;
       const cvrChg = Number(row.conversionRate || 0) - Number(prev.conversionRate || 0);
-      const aovChg = changePct(estimatedAov(row), estimatedAov(prev));
-      if (Math.abs(amountChg || 0) < 8) return "金额基本稳定";
+      const aovChg = changePct(estimatedAov(row), estimatedAov(prev)) || 0;
+      if (Math.abs(amountChg) < 8) return "金额基本稳定";
       const reasons = [];
-      if ((amountChg || 0) < -8) {
-        if ((visitorChg || 0) < -8) reasons.push("访客下降");
+      if (amountChg < 0) {
+        if (visitorChg < -8) reasons.push("访客下降");
         if (cvrChg < -1) reasons.push("转化率下降");
-        if ((aovChg || 0) < -8) reasons.push("客单价下降");
-        return reasons.length ? reasons.join(" + ") : "金额下降，需结合明细";
+        if (aovChg < -8) reasons.push("客单价下降");
+        return reasons.length ? reasons.join(" + ") : "金额下降，需看明细";
       }
-      if ((visitorChg || 0) > 8) reasons.push("访客增长");
+      if (visitorChg > 8) reasons.push("访客增长");
       if (cvrChg > 1) reasons.push("转化率提升");
-      if ((aovChg || 0) > 8) reasons.push("客单价提升");
-      return reasons.length ? reasons.join(" + ") : "金额增长，结构较均衡";
+      if (aovChg > 8) reasons.push("客单价提升");
+      return reasons.length ? reasons.join(" + ") : "金额增长，结构均衡";
     }
 
-    function latestDateForRows(rows) {
-      return [...new Set(rows.map((row) => row.date))].sort().at(-1) || "";
-    }
-
-    function previousRecord(goods, date) {
-      return [...(goods.records || [])].filter((row) => row.date < date).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
-    }
-
-    function renderOverview() {
-      const goods = selectedGoods();
-      const rows = selectedAllRows();
-      const latestDate = latestDateForRows(rows);
-      const latestRows = goods.map((goodsItem) => {
-        const row = (goodsItem.records || []).find((record) => record.date === latestDate);
-        return row ? { ...row, goodsId: goodsItem.goodsId, name: goodsItem.name, storeName: goodsItem.storeName, prev: previousRecord(goodsItem, latestDate) } : null;
-      }).filter(Boolean);
-      const amount = latestRows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
-      const visitors = latestRows.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
-      const cvr = visitors ? latestRows.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors : 0;
-      document.getElementById("yesterdayHint").textContent = latestDate ? `最近有数据日期：${latestDate}` : "暂无数据";
-      document.getElementById("yAmount").textContent = `¥${money(amount)}`;
-      document.getElementById("yVisitors").textContent = int(visitors);
-      document.getElementById("yCvr").textContent = pct(cvr);
-      document.getElementById("yGoodsCount").textContent = int(latestRows.length);
-      document.getElementById("yesterdayRows").innerHTML = latestRows.length ? latestRows.map((row) => {
-        const amountChg = changePct(row.amount, row.prev?.amount);
-        const diag = diagnosisFor(row, row.prev);
-        return `<tr>
-          <td>${row.storeName}</td><td>${row.name}</td><td>${row.goodsId}</td>
-          <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
-          <td>${fmtChange(amountChg)}</td><td class="diagnosis">${diag}</td>
-        </tr>`;
-      }).join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
-
-      const month = latestDate.slice(0, 7);
-      document.getElementById("monthHint").textContent = month ? `${month} 累计，截至 ${latestDate}` : "暂无数据";
-      const monthRows = goods.map((goodsItem) => {
-        const records = (goodsItem.records || []).filter((row) => row.date.startsWith(month) && row.date <= latestDate);
-        const amount = records.reduce((sum, row) => sum + Number(row.amount || 0), 0);
-        const visitors = records.reduce((sum, row) => sum + Number(row.visitors || 0), 0);
-        const cvr = visitors ? records.reduce((sum, row) => sum + Number(row.conversionRate || 0) * Number(row.visitors || 0), 0) / visitors : 0;
-        return { goods: goodsItem, records, amount, visitors, cvr, avg: records.length ? amount / records.length : 0 };
-      }).filter((row) => row.records.length);
-      document.getElementById("monthRows").innerHTML = monthRows.length ? monthRows.map((row) => `<tr>
-        <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
-        <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.cvr)}</td>
-        <td>¥${money(row.avg)}</td><td>${int(row.records.length)}</td>
-      </tr>`).join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
-
-      const diagnosisRows = latestRows.map((row) => {
-        const prev = row.prev;
-        const cvrDiff = prev ? Number(row.conversionRate || 0) - Number(prev.conversionRate || 0) : null;
-        return `<tr>
-          <td>${row.storeName}</td><td>${row.name}</td><td>${row.date}</td>
-          <td>${fmtChange(changePct(row.amount, prev?.amount))}</td>
-          <td>${fmtChange(changePct(row.visitors, prev?.visitors))}</td>
-          <td>${cvrDiff === null ? '<span class="badge flat">新增</span>' : `<span class="badge ${Math.abs(cvrDiff) < 0.5 ? 'flat' : cvrDiff > 0 ? 'up' : 'down'}">${cvrDiff > 0 ? '+' : ''}${cvrDiff.toFixed(2)}pt</span>`}</td>
-          <td>${fmtChange(changePct(estimatedAov(row), prev ? estimatedAov(prev) : 0))}</td>
-          <td class="diagnosis">${diagnosisFor(row, prev)}</td>
-        </tr>`;
+    function groupBySeries(items) {
+      const map = new Map();
+      items.forEach((item) => {
+        if (!map.has(item.series)) map.set(item.series, []);
+        map.get(item.series).push(item);
       });
-      document.getElementById("diagnosisRows").innerHTML = diagnosisRows.length ? diagnosisRows.join("") : `<tr><td colspan="8"><div class="empty">暂无数据</div></td></tr>`;
+      return [...map.entries()].sort((a, b) => SERIES_ORDER.indexOf(a[0]) - SERIES_ORDER.indexOf(b[0]));
     }
 
-    function niceScale(maxValue, tickCount = 4) {
-      const max = Math.max(Number(maxValue || 0), 1);
-      const rawStep = max / tickCount;
-      const power = 10 ** Math.floor(Math.log10(rawStep));
-      const base = rawStep / power;
-      const stepBase = base <= 1 ? 1 : base <= 2 ? 2 : base <= 5 ? 5 : 10;
-      const step = stepBase * power;
-      return { min: 0, max: Math.ceil(max / step) * step, step };
+    function rowFor(goods, date) {
+      const row = (goods.records || []).find((record) => record.date === date);
+      return row ? { ...row, goods } : null;
     }
 
-    function drawLineChart(svgId, rows, lines, options = {}) {
-      const svg = document.getElementById(svgId);
-      const width = svg.clientWidth || 900;
-      const height = svg.clientHeight || 300;
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.innerHTML = "";
-      if (!rows.length) {
-        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
-        return;
-      }
-      const pad = { left: 74, right: options.rightAxis ? 74 : 24, top: 30, bottom: 42 };
-      const chartW = width - pad.left - pad.right;
-      const chartH = height - pad.top - pad.bottom;
-      const dates = rows.map((row) => row.date);
-      const x = (date) => dates.length === 1
-        ? pad.left + chartW / 2
-        : pad.left + (dates.indexOf(date) / (dates.length - 1)) * chartW;
-      const domainFor = (key) => {
-        const values = rows.map((row) => Number(row[key] || 0));
-        const min = Math.min(...values);
-        const max = Math.max(...values);
-        if (min === max) {
-          const spread = Math.max(Math.abs(max) * 0.12, key === "conversionRate" ? 1 : 10);
-          return { min: Math.max(0, min - spread), max: max + spread };
-        }
-        const spread = (max - min) * 0.12;
-        return { min: Math.max(0, min - spread), max: max + spread };
-      };
-      const y = (value, domain) => {
-        const span = Math.max(domain.max - domain.min, 1);
-        return pad.top + chartH - ((Number(value || 0) - domain.min) / span) * chartH;
-      };
-      const formatFor = (key, value) => {
-        if (key === "amount") return `¥${money(value)}`;
-        if (key === "conversionRate") return pct(value);
-        return int(value);
-      };
+    function renderYesterday() {
+      const date = latestDate();
+      const items = allItems();
+      const latestRows = items.map((goods) => rowFor(goods, date)).filter(Boolean);
+      const total = aggregate(latestRows);
+      document.getElementById("latestDateText").textContent = date ? `最新数据日期：${date}` : "暂无数据";
+      document.getElementById("totalAmount").textContent = `¥${money(total.amount)}`;
+      document.getElementById("totalVisitors").textContent = int(total.visitors);
+      document.getElementById("totalCvr").textContent = pct(total.cvr);
+      document.getElementById("totalCount").textContent = `${int(new Set(items.map((i) => i.series)).size)} / ${int(items.length)}`;
 
-      const leftDomain = domainFor(lines[0].key);
-      const rightDomain = options.rightAxis && lines[1] ? domainFor(lines[1].key) : null;
-      for (let i = 0; i <= 4; i += 1) {
-        const yy = pad.top + i * chartH / 4;
-        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
-        const leftValue = leftDomain.max - ((leftDomain.max - leftDomain.min) * i / 4);
-        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">${formatFor(lines[0].key, leftValue)}</text>`);
-        if (rightDomain && lines[1]) {
-          const rightValue = rightDomain.max - ((rightDomain.max - rightDomain.min) * i / 4);
-          svg.insertAdjacentHTML("beforeend", `<text x="${width - pad.right + 10}" y="${yy + 4}" text-anchor="start" fill="#6b7280" font-size="12">${formatFor(lines[1].key, rightValue)}</text>`);
-        }
-      }
-      dates.forEach((date, index) => {
-        if (index % Math.ceil(dates.length / 7) === 0 || index === dates.length - 1) {
-          svg.insertAdjacentHTML("beforeend", `<text x="${x(date)}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${date.slice(5)}</text>`);
-        }
-      });
-
-      lines.forEach((line) => {
-        const domain = line.key === lines[0].key ? leftDomain : (rightDomain || leftDomain);
-        const points = rows.map((row) => `${x(row.date)},${y(row[line.key], domain)}`).join(" ");
-        svg.insertAdjacentHTML("beforeend", `<polyline points="${points}" fill="none" stroke="${line.color}" stroke-width="2.5"/>`);
-        rows.forEach((row) => {
-          const cx = x(row.date);
-          const cy = y(row[line.key], domain);
-          svg.insertAdjacentHTML("beforeend", `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#fff" stroke="${line.color}" stroke-width="2"/>`);
-          if (rows.length <= 3) {
-            svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, cy - 10)}" text-anchor="middle" fill="${line.color}" font-size="12" font-weight="600">${formatFor(line.key, row[line.key])}</text>`);
-          }
-        });
-      });
+      document.getElementById("seriesBlocks").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
+        const rows = goodsItems.map((goods) => rowFor(goods, date)).filter(Boolean);
+        const prevRows = goodsItems.map((goods) => {
+          const prev = previousRecord(goods, date);
+          return prev ? { ...prev, goods } : null;
+        }).filter(Boolean);
+        const current = aggregate(rows);
+        const prev = aggregate(prevRows);
+        const amountChg = changePct(current.amount, prev.amount);
+        const enriched = rows.map((row) => {
+          const prevRow = previousRecord(row.goods, date);
+          return { ...row, prev: prevRow, amountChg: changePct(row.amount, prevRow?.amount) };
+        }).sort((a, b) => Math.abs(b.amountChg || 0) - Math.abs(a.amountChg || 0));
+        const pull = enriched.find((row) => (row.amountChg || 0) > 8);
+        const drag = enriched.find((row) => (row.amountChg || 0) < -8);
+        const keyText = [pull ? `拉动：${pull.goods.name}` : "", drag ? `拖累：${drag.goods.name}` : ""].filter(Boolean).join("；") || "结构稳定";
+        const seriesDiag = diagnosis(current, prev);
+        return `<details open>
+          <summary>
+            <div class="series-name">${series}</div>
+            <div class="summary-metric"><span class="label">昨日成交</span><span class="value">¥${money(current.amount)}</span></div>
+            <div class="summary-metric"><span class="label">昨日访客</span><span class="value">${int(current.visitors)}</span></div>
+            <div class="summary-metric"><span class="label">加权转化率</span><span class="value">${pct(current.cvr)}</span></div>
+            <div class="summary-metric"><span class="label">金额变化</span><span class="value">${badge(amountChg)}</span></div>
+            <div class="summary-metric"><span class="label">初判</span><span class="value">${seriesDiag}</span></div>
+          </summary>
+          <div class="details-body">
+            <div class="hint" style="margin-bottom:10px">${keyText}</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th><th>成交金额</th><th>访客数</th><th>转化率</th><th>金额变化</th><th>原因</th></tr></thead>
+                <tbody>${enriched.map((row) => `<tr>
+                  <td>${row.goods.storeName}</td><td>${row.goods.name}</td><td>${row.goods.goodsId}</td>
+                  <td>¥${money(row.amount)}</td><td>${int(row.visitors)}</td><td>${pct(row.conversionRate)}</td>
+                  <td>${badge(row.amountChg)}</td><td class="diagnosis">${diagnosis(row, row.prev)}</td>
+                </tr>`).join("")}</tbody>
+              </table>
+            </div>
+          </div>
+        </details>`;
+      }).join("");
     }
 
-    function drawAmountChart(svgId, rows) {
-      const svg = document.getElementById(svgId);
-      const width = svg.clientWidth || 900;
-      const height = svg.clientHeight || 300;
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.innerHTML = "";
-      if (!rows.length) {
-        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
-        return;
-      }
-
-      const pad = { left: 86, right: 24, top: 30, bottom: 42 };
-      const chartW = width - pad.left - pad.right;
-      const chartH = height - pad.top - pad.bottom;
-      const scale = niceScale(Math.max(...rows.map((row) => Number(row.amount || 0))));
-      const step = chartW / Math.max(rows.length, 1);
-      const x = (index) => pad.left + step * index + step / 2;
-      const y = (value) => pad.top + chartH - (Number(value || 0) / scale.max) * chartH;
-
-      for (let value = scale.max; value >= 0; value -= scale.step) {
-        const yy = y(value);
-        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
-        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">¥${int(value)}</text>`);
-      }
-
-      rows.forEach((row, index) => {
-        const cx = x(index);
-        const barW = Math.min(64, Math.max(22, step * 0.42));
-        const yy = y(row.amount);
-        const barH = Math.max(5, pad.top + chartH - yy);
-        svg.insertAdjacentHTML("beforeend", `<rect x="${cx - barW / 2}" y="${yy}" width="${barW}" height="${barH}" rx="6" fill="#4f9f7a" opacity="0.78"/>`);
-        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, yy - 8)}" text-anchor="middle" fill="#3e8565" font-size="12" font-weight="650">¥${money(row.amount)}</text>`);
-        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${row.date.slice(5)}</text>`);
-      });
+    function weekIndex(date) {
+      return Math.ceil(Number(date.slice(8, 10)) / 7);
     }
 
-    function drawVisitorCvrChart(svgId, rows) {
-      const svg = document.getElementById(svgId);
-      const width = svg.clientWidth || 900;
-      const height = svg.clientHeight || 300;
-      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg.innerHTML = "";
-      if (!rows.length) {
-        svg.innerHTML = `<text x="24" y="48" fill="#8a94a6">暂无数据</text>`;
-        return;
-      }
-
-      const pad = { left: 74, right: 74, top: 30, bottom: 42 };
-      const chartW = width - pad.left - pad.right;
-      const chartH = height - pad.top - pad.bottom;
-      const dates = rows.map((row) => row.date);
-      const step = chartW / Math.max(dates.length, 1);
-      const x = (index) => pad.left + step * index + step / 2;
-      const visitorScale = niceScale(Math.max(...rows.map((row) => Number(row.visitors || 0))));
-      const cvrValues = rows.map((row) => Number(row.conversionRate || 0));
-      const cvrMinRaw = Math.min(...cvrValues);
-      const cvrMaxRaw = Math.max(...cvrValues);
-      const cvrSpread = cvrMinRaw === cvrMaxRaw ? Math.max(cvrMaxRaw * 0.12, 1) : (cvrMaxRaw - cvrMinRaw) * 0.12;
-      const cvrDomain = { min: Math.max(0, cvrMinRaw - cvrSpread), max: cvrMaxRaw + cvrSpread };
-      const yVisitor = (value) => pad.top + chartH - (Number(value || 0) / visitorScale.max) * chartH;
-      const yCvr = (value) => {
-        const span = Math.max(cvrDomain.max - cvrDomain.min, 1);
-        return pad.top + chartH - ((Number(value || 0) - cvrDomain.min) / span) * chartH;
-      };
-
-      for (let value = visitorScale.max; value >= 0; value -= visitorScale.step) {
-        const yy = yVisitor(value);
-        svg.insertAdjacentHTML("beforeend", `<line x1="${pad.left}" y1="${yy}" x2="${width - pad.right}" y2="${yy}" stroke="#edf0f3"/>`);
-        svg.insertAdjacentHTML("beforeend", `<text x="${pad.left - 10}" y="${yy + 4}" text-anchor="end" fill="#6b7280" font-size="12">${int(value)}</text>`);
-      }
-      for (let i = 0; i <= 4; i += 1) {
-        const yy = pad.top + i * chartH / 4;
-        const cvrValue = cvrDomain.max - ((cvrDomain.max - cvrDomain.min) * i / 4);
-        svg.insertAdjacentHTML("beforeend", `<text x="${width - pad.right + 10}" y="${yy + 4}" text-anchor="start" fill="#6b7280" font-size="12">${pct(cvrValue)}</text>`);
-      }
-
-      rows.forEach((row, index) => {
-        const cx = x(index);
-        const barW = Math.min(56, Math.max(18, step * 0.46));
-        const y = yVisitor(row.visitors);
-        const barH = Math.max(4, pad.top + chartH - y);
-        svg.insertAdjacentHTML("beforeend", `<rect x="${cx - barW / 2}" y="${y}" width="${barW}" height="${barH}" rx="5" fill="#4f8edb" opacity="0.72"/>`);
-        svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${height - 14}" text-anchor="middle" fill="#6b7280" font-size="12">${row.date.slice(5)}</text>`);
-        if (rows.length <= 3) {
-          svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, y - 8)}" text-anchor="middle" fill="#2f6fb5" font-size="12" font-weight="650">${int(row.visitors)}</text>`);
-        }
-      });
-
-      const linePoints = rows.map((row, index) => `${x(index)},${yCvr(row.conversionRate)}`);
-      if (rows.length === 1) {
-        const [cx, cy] = linePoints[0].split(",").map(Number);
-        svg.insertAdjacentHTML("beforeend", `<line x1="${cx - 34}" y1="${cy}" x2="${cx + 34}" y2="${cy}" stroke="#d97732" stroke-width="3" stroke-linecap="round"/>`);
-      } else {
-        svg.insertAdjacentHTML("beforeend", `<polyline points="${linePoints.join(" ")}" fill="none" stroke="#d97732" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`);
-      }
-      rows.forEach((row, index) => {
-        const cx = x(index);
-        const cy = yCvr(row.conversionRate);
-        svg.insertAdjacentHTML("beforeend", `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#fff" stroke="#d97732" stroke-width="2"/>`);
-        if (rows.length <= 3) {
-          svg.insertAdjacentHTML("beforeend", `<text x="${cx}" y="${Math.max(14, cy - 10)}" text-anchor="middle" fill="#d97732" font-size="12" font-weight="650">${pct(row.conversionRate)}</text>`);
-        }
-      });
+    function monthOfLatest() {
+      return latestDate().slice(0, 7);
     }
 
-    function renderRows(rows) {
-      const root = document.getElementById("detailRows");
-      if (!rows.length) {
-        root.innerHTML = `<tr><td colspan="6"><div class="empty">当前范围暂无数据</div></td></tr>`;
-        return;
-      }
-      root.innerHTML = [...rows].sort((a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name, "zh-CN")).map((row) => `
-        <tr>
-          <td>${row.date}</td>
-          <td>${row.storeName ? `${row.storeName} / ` : ""}${row.name}</td>
-          <td>${row.goodsId}</td>
-          <td>¥${money(row.amount)}</td>
-          <td>${int(row.visitors)}</td>
-          <td>${pct(row.conversionRate)}</td>
-        </tr>`).join("");
+    function weekBuckets(records, month) {
+      const buckets = [1, 2, 3, 4, 5].map((week) => ({ week, rows: [] }));
+      records.filter((row) => row.date.startsWith(month)).forEach((row) => buckets[weekIndex(row.date) - 1].rows.push(row));
+      return buckets;
     }
 
-    function applyRange(days) {
-      const end = state.end ? new Date(`${state.end}T00:00:00`) : new Date();
-      const start = new Date(end);
-      start.setDate(start.getDate() - days + 1);
-      state.start = ymd(start);
-      state.end = ymd(end);
-      document.getElementById("startDate").value = state.start;
-      document.getElementById("endDate").value = state.end;
-      render();
+    function weekCells(records, month) {
+      return weekBuckets(records, month).map((bucket) => {
+        const agg = aggregate(bucket.rows);
+        return `<td>${bucket.rows.length ? `¥${money(agg.amount)}<br><span class="hint">${int(agg.visitors)} / ${pct(agg.cvr)}</span>` : "-"}</td>`;
+      }).join("");
+    }
+
+    function renderWeeks() {
+      const month = monthOfLatest();
+      const items = allItems();
+      document.getElementById("weekMonthText").textContent = month ? `${month} 周维度，截至 ${latestDate()}` : "暂无数据";
+      const weekHeaders = [1, 2, 3, 4, 5].map((w) => `<th>${Number(month.slice(5))}月第${w}周<br><span class="hint">成交 / 访客 / 转化</span></th>`).join("");
+      document.getElementById("seriesWeekHead").innerHTML = `<tr><th>系列</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th></tr>`;
+      document.getElementById("seriesWeekRows").innerHTML = groupBySeries(items).map(([series, goodsItems]) => {
+        const records = goodsItems.flatMap((goods) => (goods.records || []));
+        const buckets = weekBuckets(records, month);
+        const monthAgg = aggregate(records.filter((row) => row.date.startsWith(month)));
+        const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows).amount);
+        const wow = filled.length >= 2 ? changePct(filled.at(-1), filled.at(-2)) : null;
+        return `<tr><td>${series}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td></tr>`;
+      }).join("");
+
+      document.getElementById("idWeekBlocks").innerHTML = groupBySeries(items).map(([series, goodsItems]) => `<details>
+        <summary>
+          <div class="series-name">${series}</div>
+          <div class="summary-metric"><span class="label">ID 数</span><span class="value">${goodsItems.length}</span></div>
+          <div class="summary-metric"><span class="label">查看</span><span class="value">展开明细</span></div>
+        </summary>
+        <div class="details-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>店铺</th><th>商品</th><th>商品ID</th>${weekHeaders}<th>本月累计</th><th>最新周环比</th></tr></thead>
+              <tbody>${goodsItems.map((goods) => {
+                const records = goods.records || [];
+                const buckets = weekBuckets(records, month);
+                const monthAgg = aggregate(records.filter((row) => row.date.startsWith(month)));
+                const filled = buckets.filter((bucket) => bucket.rows.length).map((bucket) => aggregate(bucket.rows).amount);
+                const wow = filled.length >= 2 ? changePct(filled.at(-1), filled.at(-2)) : null;
+                return `<tr><td>${goods.storeName}</td><td>${goods.name}</td><td>${goods.goodsId}</td>${weekCells(records, month)}<td>¥${money(monthAgg.amount)}</td><td>${badge(wow)}</td></tr>`;
+              }).join("")}</tbody>
+            </table>
+          </div>
+        </div>
+      </details>`).join("");
     }
 
     function render() {
-      renderStoreTabs();
-      renderGoodsTabs();
-      const rows = filteredRows();
-      const dateRows = groupedByDate(rows);
-      renderOverview();
-      renderMetrics(rows);
-      drawAmountChart("amountChart", dateRows);
-      drawVisitorCvrChart("visitorChart", dateRows);
-      renderRows(rows);
+      renderYesterday();
+      renderWeeks();
+      document.getElementById("yesterdayView").classList.toggle("hidden", state.view !== "yesterday");
+      document.getElementById("weeksView").classList.toggle("hidden", state.view !== "weeks");
     }
 
-    document.getElementById("applyDate").onclick = () => {
-      state.start = document.getElementById("startDate").value;
-      state.end = document.getElementById("endDate").value;
-      render();
-    };
-    document.querySelectorAll("[data-range]").forEach((button) => {
-      button.onclick = () => applyRange(Number(button.dataset.range));
+    document.querySelectorAll(".tab").forEach((button) => {
+      button.onclick = () => {
+        state.view = button.dataset.view;
+        document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab === button));
+        render();
+      };
     });
 
     fetch("pdd_data.json?ts=" + Date.now())
       .then((response) => response.json())
       .then((data) => {
         state.data = data;
-        state.storeId = "all";
         document.getElementById("updatedAt").textContent = `更新：${data.updatedAt || "暂无"}`;
-        setDefaultDates();
         render();
       })
       .catch((error) => {
