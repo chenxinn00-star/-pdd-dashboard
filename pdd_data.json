@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-20 10:15:24",
+  "updatedAt": "2026-05-21 09:53:19",
   "stores": {
     "official": {
       "storeId": "official",
@@ -122,6 +122,12 @@
               "amount": 67357.62,
               "visitors": 23067,
               "conversionRate": 13.3
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 63852.05,
+              "visitors": 24612,
+              "conversionRate": 11.66
             }
           ]
         },
@@ -242,6 +248,12 @@
               "amount": 2118.5,
               "visitors": 796,
               "conversionRate": 10.8
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 2541.9,
+              "visitors": 756,
+              "conversionRate": 12.04
             }
           ]
         },
@@ -362,6 +374,12 @@
               "amount": 7862.15,
               "visitors": 2754,
               "conversionRate": 15.94
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 5874.72,
+              "visitors": 2278,
+              "conversionRate": 14.27
             }
           ]
         },
@@ -482,6 +500,12 @@
               "amount": 3010.74,
               "visitors": 1241,
               "conversionRate": 16.92
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 2768.94,
+              "visitors": 1149,
+              "conversionRate": 16.62
             }
           ]
         }
@@ -608,6 +632,12 @@
               "amount": 4893.3,
               "visitors": 533,
               "conversionRate": 13.7
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 4757.39,
+              "visitors": 590,
+              "conversionRate": 12.2
             }
           ]
         },
@@ -728,6 +758,12 @@
               "amount": 6848.06,
               "visitors": 1911,
               "conversionRate": 14.5
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 4190.49,
+              "visitors": 1396,
+              "conversionRate": 12.39
             }
           ]
         }
@@ -854,6 +890,12 @@
               "amount": 2669.13,
               "visitors": 603,
               "conversionRate": 7.96
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 1408.42,
+              "visitors": 437,
+              "conversionRate": 5.49
             }
           ]
         },
@@ -974,6 +1016,12 @@
               "amount": 1221.9,
               "visitors": 334,
               "conversionRate": 6.89
+            },
+            {
+              "date": "2026-05-20",
+              "amount": 1334.0,
+              "visitors": 386,
+              "conversionRate": 6.22
             }
           ]
         }
