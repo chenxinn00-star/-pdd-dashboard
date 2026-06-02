@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-02 15:17:04",
+  "updatedAt": "2026-06-02 15:28:45",
   "stores": {
     "official": {
       "storeId": "official",
@@ -170,6 +170,12 @@
               "amount": 55018.29,
               "visitors": 20279,
               "conversionRate": 12.6
+            },
+            {
+              "date": "2026-05-29",
+              "amount": 41699.34,
+              "visitors": 13757,
+              "conversionRate": 13.88
             },
             {
               "date": "2026-05-30",
@@ -356,6 +362,12 @@
               "amount": 12474.59,
               "visitors": 4166,
               "conversionRate": 10.49
+            },
+            {
+              "date": "2026-05-29",
+              "amount": 15003.76,
+              "visitors": 5586,
+              "conversionRate": 10.42
             },
             {
               "date": "2026-05-30",
